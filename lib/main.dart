@@ -3,6 +3,7 @@ import 'package:minesweeper/pages/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:minesweeper/themes.dart';
+import 'package:minesweeper/widgets/settings_widget.dart';
 import 'core/app_bindings.dart';
 import 'layouts/get_page_of.dart';
 import 'layouts/main_layout.dart';
@@ -28,7 +29,7 @@ class MinesweeperApp extends StatelessWidget {
         GetPageOf<MainLayout>(
             '/home',
             const HomePage(),
-                (page) => MainLayout(child: page)
+                (page) => MainLayout(bottomButtons: const SettingsWidget(),child: page,)
         ),
       ],
     );

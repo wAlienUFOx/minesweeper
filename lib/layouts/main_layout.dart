@@ -3,10 +3,12 @@ import 'package:minesweeper/widgets/abstract_state.dart';
 
 class MainLayout extends StatefulWidget {
   final Widget child;
+  final Widget? bottomButtons;
 
   const MainLayout({
     super.key,
     required this.child,
+    this.bottomButtons
   });
 
   static MainLayoutState? of(BuildContext context) {
@@ -35,7 +37,8 @@ class MainLayoutState extends AbstractState<MainLayout> {
             child: SafeArea(
               child: Scaffold(
                 backgroundColor: theme.colorScheme.background,
-                appBar: buildAppBar(),
+                //appBar: buildAppBar(),
+                floatingActionButton: widget.bottomButtons,
                 body: SizedBox(
                   width: mData.size.width,
                   height: mData.size.height,
