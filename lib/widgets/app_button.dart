@@ -27,11 +27,8 @@ class AppButton extends StatelessWidget {
     Widget button = ElevatedButton(
         onPressed: onPressed,
         style: ButtonStyle(
-            shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(borderRadius)
-                )
-            ),
+            shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(borderRadius))),
             padding: MaterialStateProperty.all<EdgeInsets>(padding),
             backgroundColor: MaterialStateColor.resolveWith((states) => theme.colorScheme.onBackground)
         ),

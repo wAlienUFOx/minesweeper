@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:minesweeper/core/theme_service/theme_service.dart';
 import 'dart:math';
 import 'package:minesweeper/widgets/abstract_state.dart';
 
@@ -11,22 +13,25 @@ class SettingsWidget extends StatefulWidget {
 
 class _SettingsWidgetState extends AbstractState<SettingsWidget> with SingleTickerProviderStateMixin {
 
-  List<ActionButton> buttons = [
-    ActionButton(
-        onPressed: () => {},
-        icon: const Icon(Icons.sunny)
-    ),
-    ActionButton(
-        onPressed: () => {},
-        icon: const Icon(Icons.volume_down)
-    )
-  ];
+  late List<ActionButton> buttons;
+  late ThemeService themeService;
   late final AnimationController controller;
   late final Animation<double> expandAnimation;
   bool open = false;
 
   @override
   void onInitPage() {
+    themeService = Get.find<ThemeService>();
+    buttons = [
+      ActionButton(
+          onPressed: () => themeService.changeTheme(),
+          icon: const Icon(Icons.sunny)
+      ),
+      ActionButton(
+          onPressed: () => {},
+          icon: const Icon(Icons.volume_down)
+      )
+    ];
     controller = AnimationController(
         value: 0.0,
         duration: const Duration(milliseconds: 500),
@@ -53,6 +58,7 @@ class _SettingsWidgetState extends AbstractState<SettingsWidget> with SingleTick
     } else {
       controller.reverse();
     }
+    setState(() {});
   }
 
   @override
@@ -62,7 +68,6 @@ class _SettingsWidgetState extends AbstractState<SettingsWidget> with SingleTick
         alignment: Alignment.bottomRight,
         clipBehavior: Clip.none,
         children: [
-          buildToClose(),
           ...buildButtons(),
           buildToOpen()
         ],
@@ -70,36 +75,11 @@ class _SettingsWidgetState extends AbstractState<SettingsWidget> with SingleTick
     );
   }
 
-  Widget buildToClose() {
-    return SizedBox(
-      width: 60,
-      height: 60,
-      child: Center(
-        child: Material(
-          shape: const CircleBorder(),
-          clipBehavior: Clip.antiAlias,
-          elevation: 4,
-          color: theme.colorScheme.onBackground,
-          child: InkWell(
-            onTap: toggle,
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Icon(
-                Icons.close,
-                color: theme.colorScheme.background,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   List<Widget> buildButtons() {
     final children = <Widget>[];
     final count = buttons.length;
-    const step = 75;
-    for (var i = 0, distance = 75.0; i < count;
+    const step = 50;
+    for (var i = 0, distance = 60.0; i < count;
     i++, distance += step) {
       children.add(
         ExpandingActionButton(
@@ -113,27 +93,12 @@ class _SettingsWidgetState extends AbstractState<SettingsWidget> with SingleTick
   }
 
   Widget buildToOpen() {
-    return IgnorePointer(
-      ignoring: open,
-      child: AnimatedContainer(
-        transformAlignment: Alignment.center,
-        transform: Matrix4.diagonal3Values(
-          open ? 0.7 : 1.0,
-          open ? 0.7 : 1.0,
-          1.0,
-        ),
-        duration: const Duration(milliseconds: 250),
-        curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
-        child: AnimatedOpacity(
-          opacity: open ? 0.0 : 1.0,
-          curve: const Interval(0.25, 1.0, curve: Curves.easeInOut),
-          duration: const Duration(milliseconds: 250),
-          child: FloatingActionButton(
-            backgroundColor: theme.colorScheme.onBackground,
-            onPressed: toggle,
-            child: Icon(Icons.settings, color: theme.colorScheme.background,),
-          ),
-        ),
+    return FloatingActionButton(
+      backgroundColor: theme.colorScheme.onBackground,
+      onPressed: toggle,
+      child: Icon(
+          open ? Icons.close : Icons.settings,
+          color: theme.colorScheme.primary
       ),
     );
   }
@@ -196,7 +161,7 @@ class ActionButton extends StatelessWidget {
       child: IconButton(
         onPressed: onPressed,
         icon: icon,
-        color: theme.colorScheme.background,
+        color: theme.colorScheme.primary,
       ),
     );
   }

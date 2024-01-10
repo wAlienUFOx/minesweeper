@@ -40,7 +40,7 @@ class _HomePageState extends AbstractState<HomePage> {
       child: AppButton(
           onPressed: item.onTap,
           title: item.title,
-          color: theme.cardColor
+          color: theme.colorScheme.primary
       ),
     );
   }

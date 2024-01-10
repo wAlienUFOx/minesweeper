@@ -4,7 +4,7 @@ ThemeData lightTheme = ThemeData(
     splashColor: Colors.white,
     //fontFamily: 'SFProText',
     colorScheme: const ColorScheme.light(
-      // primary: Color(0xff2D92FD),
+      primary: Colors.white,
       // inversePrimary: Color.fromARGB(77, 45, 146, 253),
       // primaryContainer: Color(0xffFAFAFA),
       // onPrimaryContainer: Color.fromARGB(153, 52, 52, 52),
@@ -23,7 +23,7 @@ ThemeData darkTheme = ThemeData(
     splashColor: const Color(0xff2C2E30),
     //fontFamily: 'SFProText',
     colorScheme: const ColorScheme.dark(
-      // primary: Color(0xff2D92FD),
+      primary: Colors.white24,
       // inversePrimary: Color.fromARGB(77, 45, 146, 253),
       // primaryContainer: Color(0xff323232),
       // onPrimaryContainer: Color.fromARGB(153, 255, 255, 255),
