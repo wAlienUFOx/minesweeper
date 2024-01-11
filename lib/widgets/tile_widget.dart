@@ -47,7 +47,7 @@ class _TileWidgetState extends AbstractState<TileWidget> {
         height:widget.size - 4,
         width: widget.size - 4,
         decoration: BoxDecoration(
-          color: Get.isDarkMode ? Colors.white24 : Colors.grey,
+          color: Get.isDarkMode ? Colors.white12 : Colors.grey,
           border: Border.all(color: theme.colorScheme.onBackground)
         ),
         margin: const EdgeInsets.all(2),
@@ -61,7 +61,7 @@ class _TileWidgetState extends AbstractState<TileWidget> {
     if (!widget.tile.isOpen) return const SizedBox.shrink();
     if (widget.tile.hasMine) return const Icon(Icons.local_fire_department, color: Colors.deepOrange);
     Color color = const Color.fromARGB(255, 0, 0, 255);
-    if (widget.tile.digit == 0) return const SizedBox.shrink();
+    if (widget.tile.digit == 0) return Container(color: Get.isDarkMode ? Colors.white12 : Colors.white24);
     if (widget.tile.digit == 2) color = const Color.fromARGB(255, 0, 100, 0);
     if (widget.tile.digit == 3) color = const Color.fromARGB(255, 178, 34, 34);
     if (widget.tile.digit == 4) color = const Color.fromARGB(255, 25, 25, 112);
