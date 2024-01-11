@@ -29,8 +29,11 @@ class _HomePageState extends AbstractState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: menuItems.map<Widget>((item) => buildMenuItem(item)).toList()
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Column(
+        children: menuItems.map<Widget>((item) => buildMenuItem(item)).toList()
+      ),
     );
   }
 
