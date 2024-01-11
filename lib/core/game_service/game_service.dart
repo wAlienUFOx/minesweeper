@@ -53,6 +53,27 @@ class GameService {
     }
   }
 
+  bool checkIfWin() {
+    for (int i = 0; i < width; i++) {
+      for (int j = 0; j < height; j++) {
+        if (!gameField[i][j].hasMine && !gameField[i][j].isOpen) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  void changeFlag(int x, int y) {
+    if (gameField[x][y].hasFlag == false) {
+      gameField[x][y].hasFlag = true;
+      flagsCounter.updateValue(flagsCounter.value! + 1);
+    } else {
+      gameField[x][y].hasFlag = false;
+      flagsCounter.updateValue(flagsCounter.value! - 1);
+    }
+  }
+
   bool openTile(int x, int y) {
     for (int n = x - 1; n < x + 2; n++) {
       for (int m = y - 1; m < y + 2; m++) {

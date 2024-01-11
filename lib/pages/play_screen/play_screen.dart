@@ -17,7 +17,7 @@ class PlayScreen extends StatefulWidget {
 class _PlayScreenState extends AbstractState<PlayScreen> {
   int width = 10;
   int height = 20;
-  int mines = 45;
+  int mines = 100;
   late GameService gameService;
 
   double scaleFactor = 1.0;
@@ -50,11 +50,18 @@ class _PlayScreenState extends AbstractState<PlayScreen> {
       },
       child: Transform.scale(
         scale: scaleFactor,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ...gameService.gameField.map((column) => buildColumn(column)).toList()
-          ],
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: theme.colorScheme.primary)
+          ),
+          margin: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ...gameService.gameField.map((column) => buildColumn(column)).toList()
+            ],
+          ),
         ),
       ),
     );
@@ -62,7 +69,7 @@ class _PlayScreenState extends AbstractState<PlayScreen> {
 
   Widget buildColumn(List<Tile> column) {
     double x = MediaQuery.of(context).size.width / width;
-    double y = (MediaQuery.of(context).size.height - 200) / height;
+    double y = (MediaQuery.of(context).size.height - 150) / height;
     double tileSize = x < y ? x : y;
     return Column(
       children: [
