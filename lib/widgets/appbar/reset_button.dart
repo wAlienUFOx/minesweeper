@@ -16,6 +16,7 @@ class ResetButtonWidget extends StatefulWidget {
 }
 
 class _ResetButtonWidgetState extends AbstractState<ResetButtonWidget> {
+
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
@@ -27,7 +28,7 @@ class _ResetButtonWidgetState extends AbstractState<ResetButtonWidget> {
               backgroundColor: theme.colorScheme.onBackground,
               side: BorderSide(color: theme.colorScheme.primary)
           ),
-          onPressed: () => Get.find<GameService>().restartGame(mainLayout),
+          onPressed: Get.find<GameService>().restartGame,
           child: Icon(Icons.tag_faces_rounded, color: theme.colorScheme.primary)
       ),
     );

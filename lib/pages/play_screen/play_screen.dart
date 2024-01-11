@@ -26,6 +26,9 @@ class _PlayScreenState extends AbstractState<PlayScreen> {
     gameService.generateEmptyField(width, height, mines);
     gameService.generateField(5, 15);
     setState(() {});
+    gameService.needChangeState.valueChanges.listen((event) {
+      if(event!) setState(() {});
+    });
     super.onInitPage();
   }
 

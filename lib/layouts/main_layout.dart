@@ -23,15 +23,6 @@ class MainLayout extends StatefulWidget {
 
 class MainLayoutState extends AbstractState<MainLayout> {
 
-  bool tmp = false;
-
-  void updateState() async {
-    setState(() {
-      tmp = !tmp;
-      print('___________________________lay___');
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     MediaQueryData mData = MediaQuery.of(context);

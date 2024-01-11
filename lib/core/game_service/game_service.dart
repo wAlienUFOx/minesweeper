@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:minesweeper/core/game_service/tile.dart';
-import 'package:minesweeper/layouts/main_layout.dart';
 import '../local_storage/local_storage.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
@@ -8,6 +7,7 @@ class GameService {
   List<List<Tile>> gameField = [];
   FormControl<int> flagsCounter = FormControl(value: 0);
   FormControl<int> timerValue = FormControl(value: 0);
+  FormControl<bool> needChangeState = FormControl(value: false);
   int width = 0;
   int height = 0;
   int mines = 0;
@@ -29,11 +29,12 @@ class GameService {
   void saveField() => LocalStorage.savedField = gameField;
   void cleanSavedField() => LocalStorage.clearSavedField();
 
-  void restartGame(MainLayoutState? mainLayoutState) {
+  void restartGame() {
     generateEmptyField(width, height, mines);
     flagsCounter.updateValue(0);
     cleanSavedField();
-    mainLayoutState?.updateState();
+    needChangeState.updateValue(true);
+    needChangeState.updateValue(false);
   }
 
   void generateEmptyField(int fieldWidth, int fieldHeight, int fieldMines) {
