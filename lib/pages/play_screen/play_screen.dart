@@ -20,6 +20,10 @@ class _PlayScreenState extends AbstractState<PlayScreen> {
   int mines = 45;
   late GameService gameService;
 
+  double scaleFactor = 1.0;
+  double baseScaleFactor = 1.0;
+
+
   @override
   void onInitPage() {
     gameService = Get.find<GameService>();
@@ -27,19 +31,32 @@ class _PlayScreenState extends AbstractState<PlayScreen> {
     gameService.generateField(5, 15);
     setState(() {});
     gameService.needChangeState.valueChanges.listen((event) {
-      if(event!) setState(() {});
+      if(event! && mounted) setState(() {});
     });
     super.onInitPage();
   }
 
   @override
   Widget build(BuildContext context) {
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ...gameService.gameField.map((column) => buildColumn(column)).toList()
-      ],
+    return GestureDetector(
+      onScaleStart: (details) {
+        baseScaleFactor = scaleFactor;
+      },
+      onScaleUpdate: (details) {
+        setState(() {
+          scaleFactor = baseScaleFactor * details.scale;
+          if (scaleFactor < 1.0) scaleFactor = 1.0;
+        });
+      },
+      child: Transform.scale(
+        scale: scaleFactor,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ...gameService.gameField.map((column) => buildColumn(column)).toList()
+          ],
+        ),
+      ),
     );
   }
 

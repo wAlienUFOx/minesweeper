@@ -27,7 +27,9 @@ class GameService {
   }
 
   void saveField() => LocalStorage.savedField = gameField;
-  void cleanSavedField() => LocalStorage.clearSavedField();
+  void cleanSavedField() {
+    if(LocalStorage.hasSavedField()) LocalStorage.clearSavedField();
+  }
 
   void restartGame() {
     generateEmptyField(width, height, mines);
