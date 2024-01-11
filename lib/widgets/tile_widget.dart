@@ -43,15 +43,18 @@ class _TileWidgetState extends AbstractState<TileWidget> {
     return GestureDetector(
       onTap: onTap,
       onDoubleTap: onDoubleTap,
-      child: Container(
-        height:widget.size - 4,
-        width: widget.size - 4,
-        decoration: BoxDecoration(
-          color: Get.isDarkMode ? Colors.white12 : Colors.grey,
-          border: Border.all(color: theme.colorScheme.onBackground)
+      child: IgnorePointer(
+        ignoring: widget.tile.ignore,
+        child: Container(
+          height:widget.size - 4,
+          width: widget.size - 4,
+          decoration: BoxDecoration(
+            color: Get.isDarkMode ? Colors.white12 : Colors.grey,
+            border: Border.all(color: theme.colorScheme.onBackground)
+          ),
+          margin: const EdgeInsets.all(2),
+          child: Center(child: buildChild()),
         ),
-        margin: const EdgeInsets.all(2),
-        child: Center(child: buildChild()),
       ),
     );
   }

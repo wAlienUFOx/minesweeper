@@ -5,6 +5,7 @@ class Tile {
   int digit;
   bool isOpen;
   bool hasFlag;
+  bool ignore;
 
   Tile({
     required this.x,
@@ -12,6 +13,7 @@ class Tile {
     this.hasMine = false,
     this.digit = 0,
     this.isOpen = false,
-    this.hasFlag = false
+    this.hasFlag = false,
+    this.ignore = false
   });
 }

@@ -56,14 +56,25 @@ class GameService {
   }
 
   bool checkIfWin() {
-    for (int i = 0; i < width; i++) {
-      for (int j = 0; j < height; j++) {
-        if (!gameField[i][j].hasMine && !gameField[i][j].isOpen) {
+    for (int x = 0; x < width; x++) {
+      for (int y = 0; y < height; y++) {
+        if (!gameField[x][y].hasMine && !gameField[x][y].isOpen) {
           return false;
         }
       }
     }
     return true;
+  }
+
+  void gameOver() {
+    for (int x = 0; x < width; x++) {
+      for (int y = 0; y < height; y++) {
+        if (gameField[x][y].hasMine) gameField[x][y].isOpen = true;
+        gameField[x][y].ignore = true;
+      }
+    }
+    needChangeState.updateValue(true);
+    needChangeState.updateValue(false);
   }
 
   void changeFlag(int x, int y) {
@@ -108,7 +119,7 @@ class GameService {
     }
     if(gameField[x][y].isOpen) return;
     if(gameField[x][y].hasMine) {
-      //endgame
+      gameOver();
     } else {
       gameField[x][y].isOpen = true;
       if(gameField[x][y].digit == 0) {
@@ -126,7 +137,7 @@ class GameService {
           if (i >= 0 && i < width) {
             for (int j = y-1; j <= y+1; j++) {
               if (j >= 0 && j < height) {
-                if((i != x || j != y) && gameField[i][j].digit == 0) openTile(i, j);
+                if((i != x || j != y) && gameField[i][j].digit == 0 && !gameField[i][j].hasMine) openTile(i, j);
               }
             }
           }
