@@ -8,6 +8,7 @@ class GameService {
   FormControl<int> flagsCounter = FormControl(value: 0);
   FormControl<int> timerValue = FormControl(value: 0);
   FormControl<bool> needChangeState = FormControl(value: false);
+  bool newGame = true;
   int width = 0;
   int height = 0;
   int mines = 0;
@@ -40,6 +41,7 @@ class GameService {
   }
 
   void generateEmptyField(int fieldWidth, int fieldHeight, int fieldMines) {
+    newGame = true;
     gameField = [];
     flagsCounter.updateValue(0);
     mines = fieldMines;
@@ -74,21 +76,42 @@ class GameService {
     }
   }
 
-  bool openTile(int x, int y) {
-    for (int n = x - 1; n < x + 2; n++) {
-      for (int m = y - 1; m < y + 2; m++) {
-        if (n > 0 && m > 0 && n < gameField.length && m < gameField[0].length) {
-          if (gameField[n][m].hasMine) {
-            return false;
-          } else {
-            gameField[n][m].isOpen = true;
-            if (gameField[n][m].digit == 0 && !gameField[n][m].isOpen) openTile(n, m);
+  void openTile(int x, int y) {
+    if(newGame) {
+      newGame = false;
+      generateField(x, y);
+    }
+    if(gameField[x][y].isOpen) return;
+    if(gameField[x][y].hasMine) {
+      //endgame
+    } else {
+      gameField[x][y].isOpen = true;
+      if(gameField[x][y].digit == 0) {
+        for (int i = x-1; i <= x+1; i++) {
+          if (i >= 0 && i < width) {
+            for (int j = y-1; j <= y+1; j++) {
+              if (j >= 0 && j < height) {
+                if(i != x || j != y) openTile(i, j);
+              }
+            }
+          }
+        }
+      } else {
+        for (int i = x-1; i <= x+1; i++) {
+          if (i >= 0 && i < width) {
+            for (int j = y-1; j <= y+1; j++) {
+              if (j >= 0 && j < height) {
+                if((i != x || j != y) && gameField[i][j].digit == 0) openTile(i, j);
+              }
+            }
           }
         }
       }
     }
+    needChangeState.updateValue(true);
+    needChangeState.updateValue(false);
     saveField();
-    return true;
+    //check if win;
   }
 
   void generateField(int firstX, int firstY) async {
@@ -118,6 +141,5 @@ class GameService {
         }
       }
     }
-    openTile(firstX, firstY);
   }
 }

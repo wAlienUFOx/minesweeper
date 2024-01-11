@@ -17,7 +17,7 @@ class PlayScreen extends StatefulWidget {
 class _PlayScreenState extends AbstractState<PlayScreen> {
   int width = 10;
   int height = 20;
-  int mines = 100;
+  int mines = 33;
   late GameService gameService;
 
   double scaleFactor = 1.0;
@@ -28,7 +28,6 @@ class _PlayScreenState extends AbstractState<PlayScreen> {
   void onInitPage() {
     gameService = Get.find<GameService>();
     gameService.generateEmptyField(width, height, mines);
-    gameService.generateField(5, 15);
     setState(() {});
     gameService.needChangeState.valueChanges.listen((event) {
       if(event! && mounted) setState(() {});

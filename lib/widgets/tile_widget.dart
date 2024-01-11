@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:minesweeper/core/game_service/game_service.dart';
 import 'package:minesweeper/core/game_service/tile.dart';
 import 'package:minesweeper/widgets/abstract_state.dart';
 
@@ -18,17 +19,29 @@ class TileWidget extends StatefulWidget {
 }
 
 class _TileWidgetState extends AbstractState<TileWidget> {
+
+  late GameService gameService;
+
+  @override
+  void onInitPage() {
+    gameService = Get.find<GameService>();
+    super.onInitPage();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height:widget.size - 4,
-      width: widget.size - 4,
-      decoration: BoxDecoration(
-        color: Get.isDarkMode ? Colors.white24 : Colors.grey,
-        border: Border.all(color: theme.colorScheme.onBackground)
+    return GestureDetector(
+      onTap: () => gameService.openTile(widget.tile.x, widget.tile.y),
+      child: Container(
+        height:widget.size - 4,
+        width: widget.size - 4,
+        decoration: BoxDecoration(
+          color: Get.isDarkMode ? Colors.white24 : Colors.grey,
+          border: Border.all(color: theme.colorScheme.onBackground)
+        ),
+        margin: const EdgeInsets.all(2),
+        child: Center(child: buildChild()),
       ),
-      margin: const EdgeInsets.all(2),
-      child: Center(child: buildChild()),
     );
   }
 
@@ -37,6 +50,7 @@ class _TileWidgetState extends AbstractState<TileWidget> {
     if (widget.tile.hasFlag) return const Icon(Icons.flag, color: Colors.red);
     if (widget.tile.hasMine) return const Icon(Icons.local_fire_department, color: Colors.deepOrange);
     Color color = const Color.fromARGB(255, 0, 0, 255);
+    if (widget.tile.digit == 0) return const SizedBox.shrink();
     if (widget.tile.digit == 2) color = const Color.fromARGB(255, 0, 100, 0);
     if (widget.tile.digit == 3) color = const Color.fromARGB(255, 178, 34, 34);
     if (widget.tile.digit == 4) color = const Color.fromARGB(255, 25, 25, 112);
