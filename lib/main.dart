@@ -1,3 +1,4 @@
+import 'package:minesweeper/layouts/components/game_appbar.dart';
 import 'package:minesweeper/pages/home/home_page.dart';
 import 'package:minesweeper/pages/play_screen/play_screen.dart';
 import 'package:minesweeper/pages/splash_screen/splash_screen.dart';
@@ -6,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:minesweeper/themes.dart';
 import 'package:minesweeper/widgets/settings_widget.dart';
 import 'core/app_bindings.dart';
-import 'layouts/get_page_of.dart';
+import 'layouts/components/get_page_of.dart';
 import 'layouts/main_layout.dart';
 
 void main() async {
@@ -35,7 +36,7 @@ class MinesweeperApp extends StatelessWidget {
         GetPageOf<MainLayout>(
             '/game',
             const PlayScreen(),
-                (page) => MainLayout(child: page)
+                (page) => MainLayout(appBar: const GameAppBar(), child: page)
         ),
       ],
     );

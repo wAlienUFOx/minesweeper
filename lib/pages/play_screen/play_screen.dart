@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:minesweeper/core/game_service/game_service.dart';
 import 'package:minesweeper/widgets/abstract_state.dart';
 import 'package:minesweeper/widgets/tile_widget.dart';
-
 import '../../core/game_service/tile.dart';
 
 class PlayScreen extends StatefulWidget {
@@ -24,8 +23,8 @@ class _PlayScreenState extends AbstractState<PlayScreen> {
   @override
   void onInitPage() {
     gameService = Get.find<GameService>();
-    gameService.generateEmptyField(width, height);
-    gameService.generateField(width, height, mines, 5, 15);
+    gameService.generateEmptyField(width, height, mines);
+    gameService.generateField(5, 15);
     setState(() {});
     super.onInitPage();
   }
@@ -43,7 +42,7 @@ class _PlayScreenState extends AbstractState<PlayScreen> {
 
   Widget buildColumn(List<Tile> column) {
     double x = MediaQuery.of(context).size.width / width;
-    double y = MediaQuery.of(context).size.height / height;
+    double y = (MediaQuery.of(context).size.height - 200) / height;
     double tileSize = x < y ? x : y;
     return Column(
       children: [

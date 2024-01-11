@@ -1,16 +1,47 @@
 import 'dart:math';
 import 'package:minesweeper/core/game_service/tile.dart';
+import 'package:minesweeper/layouts/main_layout.dart';
 import '../local_storage/local_storage.dart';
+import 'package:reactive_forms/reactive_forms.dart';
 
 class GameService {
   List<List<Tile>> gameField = [];
+  FormControl<int> flagsCounter = FormControl(value: 0);
+  FormControl<int> timerValue = FormControl(value: 0);
+  int width = 0;
+  int height = 0;
+  int mines = 0;
 
-  void initService() => gameField = LocalStorage.hasSavedField() ? LocalStorage.savedField : [];
+  void initService() {
+    gameField = LocalStorage.hasSavedField() ? LocalStorage.savedField : [];
+    if (gameField.isNotEmpty) {
+      width = gameField.length;
+      height = gameField[0].length;
+      for (int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
+          if (gameField[x][y].hasMine) mines++;
+          if (gameField[x][y].hasFlag) flagsCounter.updateValue(flagsCounter.value! + 1);
+        }
+      }
+    }
+  }
+
   void saveField() => LocalStorage.savedField = gameField;
   void cleanSavedField() => LocalStorage.clearSavedField();
 
-  void generateEmptyField(int width, int height) {
+  void restartGame(MainLayoutState? mainLayoutState) {
+    generateEmptyField(width, height, mines);
+    flagsCounter.updateValue(0);
+    cleanSavedField();
+    mainLayoutState?.updateState();
+  }
+
+  void generateEmptyField(int fieldWidth, int fieldHeight, int fieldMines) {
     gameField = [];
+    flagsCounter.updateValue(0);
+    mines = fieldMines;
+    width = fieldWidth;
+    height = fieldHeight;
     for (int x = 0; x < width; x++) {
       gameField.add([]);
       for (int y = 0; y < height; y++) {
@@ -36,7 +67,7 @@ class GameService {
     return true;
   }
 
-  void generateField(int width, int height, int mines, int firstX, int firstY) async {
+  void generateField(int firstX, int firstY) async {
     if (LocalStorage.hasSavedField()) cleanSavedField();
     int x;
     int y;
@@ -63,17 +94,6 @@ class GameService {
         }
       }
     }
-    // for (int i = 0; i < width; i++) {
-    //   for (int j = 0; j < height; j++) {
-    //     for (int n = i - 1; n <= i + 1; n++) {
-    //       for (int m = j - 1; m <= j + 1; m++) {
-    //         if (n > 0 && m > 0 && n < width && m < width && (n != i && m != j)) {
-    //           if (gameField[n][m].hasMine) gameField[i][j].digit++;
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
     openTile(firstX, firstY);
   }
 }

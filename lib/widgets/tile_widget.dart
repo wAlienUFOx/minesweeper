@@ -23,12 +23,7 @@ class _TileWidgetState extends State<TileWidget> {
       width: widget.size - 4,
       color: widget.tile.hasMine ? Colors.red : Colors.grey,
       margin: const EdgeInsets.all(2),
-      child: Center(child: Column(
-        children: [
-          Text(widget.tile.digit.toString()),
-          Text('${widget.tile.x} ${widget.tile.y}')
-        ],
-      )),
+      child: Center(child: Text(widget.tile.digit.toString())),
     );
   }
 }

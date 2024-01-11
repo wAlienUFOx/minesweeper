@@ -14,8 +14,8 @@ ThemeData lightTheme = ThemeData(
       // tertiary: Color.fromARGB(52, 52, 52, 52),
       // onSurface: Color(0xff343434),
       // onSurfaceVariant: Color.fromARGB(102, 52, 52, 52),
-      // secondaryContainer: Colors.white,
-      // onSecondaryContainer: Color(0xffD9D9D9),
+       secondaryContainer: Colors.white30,
+       onSecondaryContainer: Color(0xffD9D9D9),
     ),
 );
 
@@ -33,7 +33,7 @@ ThemeData darkTheme = ThemeData(
       // tertiary: Color.fromARGB(52, 255, 255, 255),
       // onSurface: Color(0xffffffff),
       // onSurfaceVariant: Color.fromARGB(102, 255, 255, 255),
-      // secondaryContainer: Color(0xff343434),
-      // onSecondaryContainer: Color(0xff444545),
+       secondaryContainer: Color(0xff343434),
+       onSecondaryContainer: Color(0xff444545),
     ),
 );
