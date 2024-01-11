@@ -22,6 +22,16 @@ class _TileWidgetState extends AbstractState<TileWidget> {
 
   late GameService gameService;
 
+  void onTap () => gameService.openTile(widget.tile.x, widget.tile.y);
+
+  void onDoubleTap () {
+    if(widget.tile.isOpen) {
+      gameService.openByFlags(widget.tile.x, widget.tile.y);
+    } else {
+      gameService.changeFlag(widget.tile.x, widget.tile.y);
+    }
+  }
+
   @override
   void onInitPage() {
     gameService = Get.find<GameService>();
@@ -31,7 +41,8 @@ class _TileWidgetState extends AbstractState<TileWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => gameService.openTile(widget.tile.x, widget.tile.y),
+      onTap: onTap,
+      onDoubleTap: onDoubleTap,
       child: Container(
         height:widget.size - 4,
         width: widget.size - 4,
@@ -46,8 +57,8 @@ class _TileWidgetState extends AbstractState<TileWidget> {
   }
 
   Widget buildChild() {
+    if (!widget.tile.isOpen && widget.tile.hasFlag) return const Icon(Icons.flag, color: Color.fromARGB(255, 165, 42, 42));
     if (!widget.tile.isOpen) return const SizedBox.shrink();
-    if (widget.tile.hasFlag) return const Icon(Icons.flag, color: Colors.red);
     if (widget.tile.hasMine) return const Icon(Icons.local_fire_department, color: Colors.deepOrange);
     Color color = const Color.fromARGB(255, 0, 0, 255);
     if (widget.tile.digit == 0) return const SizedBox.shrink();

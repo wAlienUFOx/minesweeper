@@ -16,9 +16,6 @@ class _TimerWidgetState extends AbstractState<TimerWidget> {
   @override
   void onInitPage() {
     gameService = Get.find<GameService>();
-    gameService.flagsCounter.valueChanges.listen((newValue) {
-      setState(() {});
-    });
     super.onInitPage();
   }
 

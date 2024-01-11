@@ -68,18 +68,43 @@ class GameService {
 
   void changeFlag(int x, int y) {
     if (gameField[x][y].hasFlag == false) {
-      gameField[x][y].hasFlag = true;
       flagsCounter.updateValue(flagsCounter.value! + 1);
     } else {
-      gameField[x][y].hasFlag = false;
       flagsCounter.updateValue(flagsCounter.value! - 1);
+    }
+    gameField[x][y].hasFlag = !gameField[x][y].hasFlag;
+    needChangeState.updateValue(true);
+    needChangeState.updateValue(false);
+  }
+
+  void openByFlags(int x, int y) {
+    int flagsAround = 0;
+    for (int i = x-1; i <= x+1; i++) {
+      if (i >= 0 && i < width) {
+        for (int j = y-1; j <= y+1; j++) {
+          if (j >= 0 && j < height) {
+            if((i != x || j != y) && gameField[i][j].hasFlag) flagsAround++;
+          }
+        }
+      }
+    }
+    if (flagsAround != gameField[x][y].digit) return;
+
+    for (int i = x-1; i <= x+1; i++) {
+      if (i >= 0 && i < width) {
+        for (int j = y-1; j <= y+1; j++) {
+          if (j >= 0 && j < height) {
+            if((i != x || j != y) && !gameField[i][j].hasFlag && !gameField[i][j].isOpen) openTile(i, j);
+          }
+        }
+      }
     }
   }
 
   void openTile(int x, int y) {
     if(newGame) {
       newGame = false;
-      generateField(x, y);
+      generateField(x, y, mines);
     }
     if(gameField[x][y].isOpen) return;
     if(gameField[x][y].hasMine) {
@@ -114,7 +139,7 @@ class GameService {
     //check if win;
   }
 
-  void generateField(int firstX, int firstY) async {
+  void generateField(int firstX, int firstY, int mines) async {
     if (LocalStorage.hasSavedField()) cleanSavedField();
     int x;
     int y;
