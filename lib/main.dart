@@ -1,4 +1,5 @@
 import 'package:minesweeper/pages/home/home_page.dart';
+import 'package:minesweeper/pages/play_screen/play_screen.dart';
 import 'package:minesweeper/pages/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,7 +30,12 @@ class MinesweeperApp extends StatelessWidget {
         GetPageOf<MainLayout>(
             '/home',
             const HomePage(),
-                (page) => MainLayout(bottomButtons: const SettingsWidget(),child: page,)
+                (page) => MainLayout(bottomButtons: const SettingsWidget(),child: page)
+        ),
+        GetPageOf<MainLayout>(
+            '/game',
+            const PlayScreen(),
+                (page) => MainLayout(child: page)
         ),
       ],
     );

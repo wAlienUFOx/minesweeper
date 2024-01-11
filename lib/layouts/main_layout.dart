@@ -49,9 +49,7 @@ class MainLayoutState extends AbstractState<MainLayout> {
                       minWidth: maxWidth,
                       maxWidth: maxWidth,
                     ),
-                    child: SingleChildScrollView(
-                      child: widget.child,
-                    ),
+                    child: widget.child,
                   ),
                 ),
               ),

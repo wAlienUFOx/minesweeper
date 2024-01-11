@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:minesweeper/core/game_service/tile.dart';
 
 class TileWidget extends StatefulWidget {
-  final bool isOpen;
-  final bool hasMine;
+  final Tile tile;
   final double size;
   
   const TileWidget({
-    required this.isOpen,
-    required this.hasMine,
+    required this.tile,
     required this.size,
     super.key
   });
@@ -20,8 +19,16 @@ class _TileWidgetState extends State<TileWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.green,
-      padding: const EdgeInsets.all(1),
+      height:widget.size - 4,
+      width: widget.size - 4,
+      color: widget.tile.hasMine ? Colors.red : Colors.grey,
+      margin: const EdgeInsets.all(2),
+      child: Center(child: Column(
+        children: [
+          Text(widget.tile.digit.toString()),
+          Text('${widget.tile.x} ${widget.tile.y}')
+        ],
+      )),
     );
   }
 }

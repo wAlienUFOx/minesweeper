@@ -1,6 +1,7 @@
 import  'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:minesweeper/core/app_bindings.dart';
+import 'package:minesweeper/core/game_service/game_service.dart';
 import 'package:minesweeper/core/theme_service/theme_service.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -24,6 +25,7 @@ class SplashScreenState extends State<SplashScreen> {
   Future<void> initApp() async {
     await AppBindings().dependencies();
     Get.find<ThemeService>().initService();
+    Get.find<GameService>().initService();
     await Future.delayed(const Duration(milliseconds: 100));
   }
 

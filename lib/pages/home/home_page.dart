@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:minesweeper/widgets/abstract_state.dart';
 import 'package:minesweeper/widgets/app_button.dart';
 import '../../widgets/group_button.dart';
@@ -19,7 +20,7 @@ class _HomePageState extends AbstractState<HomePage> {
     ),
     GroupButton(
         title: 'New game',
-        onTap: () => {}
+        onTap: () => Get.toNamed('/game')
     ),
     GroupButton(
         title: 'Records',
