@@ -63,8 +63,3 @@ class WinnerDialog extends StatelessWidget {
     );
   }
 }
-
-
-// Widget buildButton (String title, void Function() onTap) {
-//   return
-// }

@@ -74,6 +74,6 @@ class _TileWidgetState extends AbstractState<TileWidget> {
     if (widget.tile.digit == 8) color = const Color.fromARGB(255, 211, 211, 211);
     return Text(
         widget.tile.digit.toString(),
-        style: TextStyle(color: color, fontSize: 20, fontWeight: FontWeight.bold));
+        style: TextStyle(color: color, fontSize: 20 * widget.size / 40, fontWeight: FontWeight.bold));
   }
 }

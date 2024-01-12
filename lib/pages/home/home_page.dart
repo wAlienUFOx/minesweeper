@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:minesweeper/widgets/abstract_state.dart';
 import 'package:minesweeper/widgets/app_button.dart';
+import 'package:minesweeper/widgets/dialogs/choose_mode_dialog.dart';
 import '../../widgets/group_button.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,10 +21,12 @@ class _HomePageState extends AbstractState<HomePage> {
     ),
     GroupButton(
         title: 'New game',
-        onTap: () => Get.toNamed('/game')
+        onTap: () => Get.dialog(const ChooseModeDialog()).then((gameMode) {
+          if (gameMode != null) Get.toNamed('/game', arguments: {'gameMode': gameMode});
+        })
     ),
     GroupButton(
-        title: 'Records',
+        title: 'Leaderboard',
         onTap: () => {}
     ),
   ];

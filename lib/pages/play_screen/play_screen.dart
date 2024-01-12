@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:minesweeper/core/game_service/game_mode.dart';
 import 'package:minesweeper/core/game_service/game_service.dart';
 import 'package:minesweeper/widgets/abstract_state.dart';
 import 'package:minesweeper/widgets/tile_widget.dart';
@@ -15,10 +16,9 @@ class PlayScreen extends StatefulWidget {
 }
 
 class _PlayScreenState extends AbstractState<PlayScreen> {
-  int width = 5;
-  int height = 10;
-  int mines = 3;
+
   late GameService gameService;
+  late GameMode gameMode;
 
   double scaleFactor = 1.0;
   double baseScaleFactor = 1.0;
@@ -26,8 +26,10 @@ class _PlayScreenState extends AbstractState<PlayScreen> {
 
   @override
   void onInitPage() {
+    Map<String, dynamic> args = Get.arguments;
+    gameMode = args['gameMode'];
     gameService = Get.find<GameService>();
-    gameService.generateEmptyField(width, height, mines);
+    gameService.generateEmptyField(gameMode);
     setState(() {});
     gameService.needChangeState.valueChanges.listen((event) {
       if(event! && mounted) setState(() {});
@@ -67,8 +69,8 @@ class _PlayScreenState extends AbstractState<PlayScreen> {
   }
 
   Widget buildColumn(List<Tile> column) {
-    double x = MediaQuery.of(context).size.width / width;
-    double y = (MediaQuery.of(context).size.height - 150) / height;
+    double x = (MediaQuery.of(context).size.width - 50) / gameMode.width;
+    double y = (MediaQuery.of(context).size.height - 150) / gameMode.height;
     double tileSize = x < y ? x : y;
     return Column(
       children: [

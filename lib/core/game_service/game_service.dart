@@ -1,7 +1,8 @@
 import 'dart:math';
 import 'package:get/get.dart';
+import 'package:minesweeper/core/game_service/game_mode.dart';
 import 'package:minesweeper/core/game_service/tile.dart';
-import 'package:minesweeper/widgets/winner_dialog.dart';
+import 'package:minesweeper/widgets/dialogs/winner_dialog.dart';
 import '../local_storage/local_storage.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
@@ -44,23 +45,23 @@ class GameService {
   }
 
   void restartGame() {
-    generateEmptyField(width, height, mines);
+    generateEmptyField(GameMode(width: width, height: height, mines: mines));
     flagsCounter.updateValue(0);
     cleanSavedField();
     needChangeState.updateValue(true);
     needChangeState.updateValue(false);
   }
 
-  void generateEmptyField(int fieldWidth, int fieldHeight, int fieldMines) {
+  void generateEmptyField(GameMode gameMode) {
     newGame = true;
     gameField = [];
     flagsCounter.updateValue(0);
     savedTimer = 0;
     stopwatch.reset();
     stopwatch.stop();
-    mines = fieldMines;
-    width = fieldWidth;
-    height = fieldHeight;
+    mines = gameMode.mines;
+    width = gameMode.width;
+    height = gameMode.height;
     for (int x = 0; x < width; x++) {
       gameField.add([]);
       for (int y = 0; y < height; y++) {
