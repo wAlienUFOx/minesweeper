@@ -4,12 +4,8 @@ import 'package:minesweeper/core/game_service/game_service.dart';
 import 'package:minesweeper/widgets/abstract_state.dart';
 
 class ResetButtonWidget extends StatefulWidget {
-  //final void Function() callBack;
 
-  const ResetButtonWidget({
-    //required this.callBack,
-    super.key
-  });
+  const ResetButtonWidget({super.key});
 
   @override
   State<ResetButtonWidget> createState() => _ResetButtonWidgetState();

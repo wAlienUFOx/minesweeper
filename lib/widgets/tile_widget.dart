@@ -22,7 +22,9 @@ class _TileWidgetState extends AbstractState<TileWidget> {
 
   late GameService gameService;
 
-  void onTap () => gameService.openTile(widget.tile.x, widget.tile.y);
+  void onTap () {
+    if (!widget.tile.hasFlag) gameService.openTile(widget.tile.x, widget.tile.y);
+  }
 
   void onDoubleTap () {
     if(widget.tile.isOpen) {

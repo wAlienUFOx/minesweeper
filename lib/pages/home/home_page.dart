@@ -4,6 +4,7 @@ import 'package:minesweeper/core/game_service/game_service.dart';
 import 'package:minesweeper/widgets/abstract_state.dart';
 import 'package:minesweeper/widgets/app_button.dart';
 import 'package:minesweeper/widgets/dialogs/choose_mode_dialog.dart';
+import '../../core/local_storage/local_storage.dart';
 import '../../widgets/group_button.dart';
 
 class HomePage extends StatefulWidget {
@@ -51,7 +52,7 @@ class _HomePageState extends AbstractState<HomePage> {
       ),
       GroupButton(
           title: 'Leaderboard',
-          onTap: () => {}
+          onTap: () => print(LocalStorage.savedTimer)
       ),
     ];
 

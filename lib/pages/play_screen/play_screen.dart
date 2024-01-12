@@ -15,8 +15,7 @@ class PlayScreen extends StatefulWidget {
   State<PlayScreen> createState() => _PlayScreenState();
 }
 
-class _PlayScreenState extends AbstractState<PlayScreen> {
-
+class _PlayScreenState extends AbstractState<PlayScreen> with WidgetsBindingObserver {
   late GameService gameService;
   late GameMode gameMode;
   late bool resumeGame;
@@ -27,12 +26,14 @@ class _PlayScreenState extends AbstractState<PlayScreen> {
 
   Future<bool> onPopPage() {
     gameService.stopwatch.stop();
+    gameService.saveField();
     callback();
     return Future(() => true);
   }
 
   @override
   void onInitPage() {
+    WidgetsBinding.instance.addObserver(this);
     gameService = Get.find<GameService>();
     Map<String, dynamic> args = Get.arguments;
     resumeGame = args['continue'];
@@ -44,9 +45,26 @@ class _PlayScreenState extends AbstractState<PlayScreen> {
 
     setState(() {});
     gameService.needChangeState.valueChanges.listen((event) {
-      if(event! && mounted) setState(() {});
+      if(mounted) setState(() {});
     });
     super.onInitPage();
+  }
+
+  @override
+  void onDispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.onDispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) gameService.stopwatch.start();
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+      gameService.stopwatch.stop();
+      gameService.saveField();
+    }
+    if (state == AppLifecycleState.detached) gameService.saveField();
+    super.didChangeAppLifecycleState(state);
   }
 
   @override

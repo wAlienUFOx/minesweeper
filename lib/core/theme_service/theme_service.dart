@@ -24,6 +24,6 @@ class ThemeService {
       activeTheme = ThemeMode.light;
     }
     Get.changeThemeMode(activeTheme);
-    LocalStorage.themeMode =  activeTheme.name;
+    LocalStorage.themeMode = activeTheme.name;
   }
 }
