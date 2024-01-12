@@ -46,13 +46,13 @@ class _TileWidgetState extends AbstractState<TileWidget> {
       child: IgnorePointer(
         ignoring: widget.tile.ignore,
         child: Container(
-          height:widget.size - 4,
-          width: widget.size - 4,
+          height:widget.size - 2,
+          width: widget.size - 2,
           decoration: BoxDecoration(
             color: Get.isDarkMode ? Colors.white12 : Colors.grey,
-            border: Border.all(color: theme.colorScheme.onBackground)
+            border: Border.all(color: theme.colorScheme.onBackground, width: 0.5)
           ),
-          margin: const EdgeInsets.all(2),
+          margin: const EdgeInsets.all(1),
           child: Center(child: buildChild()),
         ),
       ),
@@ -60,11 +60,25 @@ class _TileWidgetState extends AbstractState<TileWidget> {
   }
 
   Widget buildChild() {
-    if (!widget.tile.isOpen && widget.tile.hasFlag) return const Icon(Icons.flag, color: Color.fromARGB(255, 165, 42, 42));
-    if (!widget.tile.isOpen) return const SizedBox.shrink();
-    if (widget.tile.hasMine) return const Icon(Icons.local_fire_department, color: Colors.deepOrange);
+    if (!widget.tile.isOpen && widget.tile.hasFlag) {
+      return Container(
+          width: double.infinity,
+          height: double.infinity,
+          color: Get.isDarkMode ? Colors.white12 : Colors.white24,
+          child: const Icon(Icons.flag, color: Color.fromARGB(255, 165, 42, 42))
+      );
+    }
+    if (!widget.tile.isOpen) return Container(color: Get.isDarkMode ? Colors.white12 : Colors.white24);
+    if (widget.tile.hasMine) {
+      return Container(
+          width: double.infinity,
+          height: double.infinity,
+          color: Get.isDarkMode ? Colors.white12 : Colors.white24,
+          child: const Icon(Icons.local_fire_department, color: Colors.deepOrange)
+    );
+    }
     Color color = const Color.fromARGB(255, 0, 0, 255);
-    if (widget.tile.digit == 0) return Container(color: Get.isDarkMode ? Colors.white12 : Colors.white24);
+    if (widget.tile.digit == 0) return Container(color: Get.isDarkMode ? Colors.white12 : Colors.grey);
     if (widget.tile.digit == 2) color = const Color.fromARGB(255, 0, 100, 0);
     if (widget.tile.digit == 3) color = const Color.fromARGB(255, 178, 34, 34);
     if (widget.tile.digit == 4) color = const Color.fromARGB(255, 25, 25, 112);

@@ -19,17 +19,29 @@ class _PlayScreenState extends AbstractState<PlayScreen> {
 
   late GameService gameService;
   late GameMode gameMode;
+  late bool resumeGame;
+  late void Function() callback;
 
   double scaleFactor = 1.0;
   double baseScaleFactor = 1.0;
 
+  Future<bool> onPopPage() {
+    gameService.stopwatch.stop();
+    callback();
+    return Future(() => true);
+  }
 
   @override
   void onInitPage() {
-    Map<String, dynamic> args = Get.arguments;
-    gameMode = args['gameMode'];
     gameService = Get.find<GameService>();
-    gameService.generateEmptyField(gameMode);
+    Map<String, dynamic> args = Get.arguments;
+    resumeGame = args['continue'];
+    callback = args['callback'];
+    if (!resumeGame) {
+      gameMode = args['gameMode'];
+      gameService.generateEmptyField(gameMode);
+    }
+
     setState(() {});
     gameService.needChangeState.valueChanges.listen((event) {
       if(event! && mounted) setState(() {});
@@ -39,29 +51,32 @@ class _PlayScreenState extends AbstractState<PlayScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onScaleStart: (details) {
-        baseScaleFactor = scaleFactor;
-      },
-      onScaleUpdate: (details) {
-        setState(() {
-          scaleFactor = baseScaleFactor * details.scale;
-          if (scaleFactor < 1.0) scaleFactor = 1.0;
-        });
-      },
-      child: Transform.scale(
-        scale: scaleFactor,
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: theme.colorScheme.primary)
-          ),
-          margin: const EdgeInsets.all(10.0),
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ...gameService.gameField.map((column) => buildColumn(column)).toList()
-            ],
+    return WillPopScope(
+      onWillPop: onPopPage,
+      child: GestureDetector(
+        onScaleStart: (details) {
+          baseScaleFactor = scaleFactor;
+        },
+        onScaleUpdate: (details) {
+          setState(() {
+            scaleFactor = baseScaleFactor * details.scale;
+            if (scaleFactor < 1.0) scaleFactor = 1.0;
+          });
+        },
+        child: Transform.scale(
+          scale: scaleFactor,
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: theme.colorScheme.primary)
+            ),
+            margin: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ...gameService.gameField.map((column) => buildColumn(column)).toList()
+              ],
+            ),
           ),
         ),
       ),
@@ -69,8 +84,8 @@ class _PlayScreenState extends AbstractState<PlayScreen> {
   }
 
   Widget buildColumn(List<Tile> column) {
-    double x = (MediaQuery.of(context).size.width - 50) / gameMode.width;
-    double y = (MediaQuery.of(context).size.height - 150) / gameMode.height;
+    double x = (MediaQuery.of(context).size.width - 50) / (resumeGame ? gameService.width.toDouble() : gameMode.width);
+    double y = (MediaQuery.of(context).size.height - 150) / (resumeGame ? gameService.height.toDouble() : gameMode.height);
     double tileSize = x < y ? x : y;
     return Column(
       children: [

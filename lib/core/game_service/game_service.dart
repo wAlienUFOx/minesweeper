@@ -35,19 +35,22 @@ class GameService {
     }
   }
 
+  bool canContinue() => gameField.isNotEmpty;
+
   void saveField() {
     LocalStorage.savedField = gameField;
     LocalStorage.savedMines = mines;
     LocalStorage.savedTimer = (stopwatch.elapsedMilliseconds ~/ 1000) + savedTimer;
   }
   void cleanSavedField() {
+    gameField.clear();
     if(LocalStorage.hasSavedField()) LocalStorage.clearSavedField();
   }
 
   void restartGame() {
+    cleanSavedField();
     generateEmptyField(GameMode(width: width, height: height, mines: mines));
     flagsCounter.updateValue(0);
-    cleanSavedField();
     needChangeState.updateValue(true);
     needChangeState.updateValue(false);
   }
@@ -94,7 +97,7 @@ class GameService {
     });
   }
 
-  void gameOver() {
+  void gameOver() async {
     stopwatch.stop();
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < height; y++) {
@@ -102,9 +105,9 @@ class GameService {
         gameField[x][y].ignore = true;
       }
     }
-    cleanSavedField();
     needChangeState.updateValue(true);
     needChangeState.updateValue(false);
+    Future.delayed(const Duration(seconds: 1)).then((value) => cleanSavedField());
   }
 
   void changeFlag(int x, int y) {
@@ -191,7 +194,6 @@ class GameService {
   }
 
   void generateField(int firstX, int firstY, int mines) async {
-    if (LocalStorage.hasSavedField()) cleanSavedField();
     int x;
     int y;
     while (mines > 0) {

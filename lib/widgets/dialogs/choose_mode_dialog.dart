@@ -23,6 +23,8 @@ class _ChooseModeDialogState extends AbstractState<ChooseModeDialog> {
     if (customWidth.value!.isEmpty) return false;
     if (customHeight.value!.isEmpty) return false;
     if (customMines.value!.isEmpty) return false;
+    if (int.parse(customWidth.value!) > 20 || int.parse(customWidth.value!) < 5) return false;
+    if (int.parse(customHeight.value!) > 50 || int.parse(customHeight.value!) < 5) return false;
     int width = int.parse(customWidth.value!);
     int height = int.parse(customHeight.value!);
     int mines = int.parse(customMines.value!);

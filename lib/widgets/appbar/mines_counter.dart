@@ -18,7 +18,7 @@ class _MinesCounterWidgetState extends AbstractState<MinesCounterWidget> {
   @override
   void onInitPage() {
     gameService = Get.find<GameService>();
-    minesCounter = gameService.mines;
+    minesCounter = gameService.mines - gameService.flagsCounter.value!;
     gameService.flagsCounter.valueChanges.listen((newValue) {
       minesCounter = gameService.mines - newValue!;
       if (mounted) setState(() {});
