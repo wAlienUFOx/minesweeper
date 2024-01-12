@@ -1,5 +1,7 @@
 import 'dart:math';
+import 'package:get/get.dart';
 import 'package:minesweeper/core/game_service/tile.dart';
+import 'package:minesweeper/widgets/winner_dialog.dart';
 import '../local_storage/local_storage.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
@@ -55,15 +57,27 @@ class GameService {
     }
   }
 
-  bool checkIfWin() {
+  void checkIfWin() {
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < height; y++) {
         if (!gameField[x][y].hasMine && !gameField[x][y].isOpen) {
-          return false;
+          return;
         }
       }
     }
-    return true;
+    //winner
+    for (int x = 0; x < width; x++) {
+      for (int y = 0; y < height; y++) {
+        gameField[x][y].ignore = true;
+      }
+    }
+    Get.dialog(WinnerDialog(time: timerValue.value!)).then((newGame) {
+      if (newGame != null && newGame) {
+        restartGame();
+      } else {
+        cleanSavedField();
+      }
+    });
   }
 
   void gameOver() {
@@ -147,7 +161,7 @@ class GameService {
     needChangeState.updateValue(true);
     needChangeState.updateValue(false);
     saveField();
-    //check if win;
+    checkIfWin();
   }
 
   void generateField(int firstX, int firstY, int mines) async {

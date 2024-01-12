@@ -15,9 +15,9 @@ class PlayScreen extends StatefulWidget {
 }
 
 class _PlayScreenState extends AbstractState<PlayScreen> {
-  int width = 10;
-  int height = 20;
-  int mines = 33;
+  int width = 5;
+  int height = 10;
+  int mines = 3;
   late GameService gameService;
 
   double scaleFactor = 1.0;
