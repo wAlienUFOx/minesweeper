@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:minesweeper/widgets/abstract_state.dart';
 import 'package:get/get.dart';
@@ -12,11 +14,21 @@ class TimerWidget extends StatefulWidget {
 
 class _TimerWidgetState extends AbstractState<TimerWidget> {
   late GameService gameService;
+  late Timer timer;
 
   @override
   void onInitPage() {
     gameService = Get.find<GameService>();
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {});
+    });
     super.onInitPage();
+  }
+
+  @override
+  void onDispose() {
+    timer.cancel();
+    super.onDispose();
   }
 
   @override
@@ -33,7 +45,8 @@ class _TimerWidgetState extends AbstractState<TimerWidget> {
   }
 
   Widget buildDigit(int index) {
-    String digit = gameService.timerValue.value!.toString();
+    int seconds = ((gameService.stopwatch.elapsedMilliseconds ~/ 1000) + gameService.savedTimer).toInt();
+    String digit = seconds > 999 ? '999' : seconds.toString();
 
     if (digit.length == 1) {
       if (index < 2) digit = '0';

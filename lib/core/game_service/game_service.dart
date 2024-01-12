@@ -8,15 +8,20 @@ import 'package:reactive_forms/reactive_forms.dart';
 class GameService {
   List<List<Tile>> gameField = [];
   FormControl<int> flagsCounter = FormControl(value: 0);
-  FormControl<int> timerValue = FormControl(value: 0);
   FormControl<bool> needChangeState = FormControl(value: false);
   bool newGame = true;
+  final Stopwatch stopwatch = Stopwatch();
   int width = 0;
   int height = 0;
   int mines = 0;
+  int savedTimer = 0;
 
   void initService() {
-    gameField = LocalStorage.hasSavedField() ? LocalStorage.savedField : [];
+    if(LocalStorage.hasSavedField()) {
+      gameField = LocalStorage.savedField;
+      mines = LocalStorage.savedMines;
+      savedTimer = LocalStorage.savedTimer;
+    }
     if (gameField.isNotEmpty) {
       width = gameField.length;
       height = gameField[0].length;
@@ -29,7 +34,11 @@ class GameService {
     }
   }
 
-  void saveField() => LocalStorage.savedField = gameField;
+  void saveField() {
+    LocalStorage.savedField = gameField;
+    LocalStorage.savedMines = mines;
+    LocalStorage.savedTimer = (stopwatch.elapsedMilliseconds ~/ 1000) + savedTimer;
+  }
   void cleanSavedField() {
     if(LocalStorage.hasSavedField()) LocalStorage.clearSavedField();
   }
@@ -46,6 +55,9 @@ class GameService {
     newGame = true;
     gameField = [];
     flagsCounter.updateValue(0);
+    savedTimer = 0;
+    stopwatch.reset();
+    stopwatch.stop();
     mines = fieldMines;
     width = fieldWidth;
     height = fieldHeight;
@@ -66,12 +78,13 @@ class GameService {
       }
     }
     //winner
+    stopwatch.stop();
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < height; y++) {
         gameField[x][y].ignore = true;
       }
     }
-    Get.dialog(WinnerDialog(time: timerValue.value!)).then((newGame) {
+    Get.dialog(WinnerDialog(time: (stopwatch.elapsedMilliseconds ~/ 1000) + savedTimer)).then((newGame) {
       if (newGame != null && newGame) {
         restartGame();
       } else {
@@ -81,28 +94,37 @@ class GameService {
   }
 
   void gameOver() {
+    stopwatch.stop();
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < height; y++) {
         if (gameField[x][y].hasMine) gameField[x][y].isOpen = true;
         gameField[x][y].ignore = true;
       }
     }
+    cleanSavedField();
     needChangeState.updateValue(true);
     needChangeState.updateValue(false);
   }
 
   void changeFlag(int x, int y) {
+    if(!stopwatch.isRunning) {
+      stopwatch.start();
+    }
     if (gameField[x][y].hasFlag == false) {
       flagsCounter.updateValue(flagsCounter.value! + 1);
     } else {
       flagsCounter.updateValue(flagsCounter.value! - 1);
     }
     gameField[x][y].hasFlag = !gameField[x][y].hasFlag;
+    saveField();
     needChangeState.updateValue(true);
     needChangeState.updateValue(false);
   }
 
   void openByFlags(int x, int y) {
+    if(!stopwatch.isRunning) {
+      stopwatch.start();
+    }
     int flagsAround = 0;
     for (int i = x-1; i <= x+1; i++) {
       if (i >= 0 && i < width) {
@@ -127,6 +149,9 @@ class GameService {
   }
 
   void openTile(int x, int y) {
+    if(!stopwatch.isRunning) {
+      stopwatch.start();
+    }
     if(newGame) {
       newGame = false;
       generateField(x, y, mines);
@@ -191,5 +216,6 @@ class GameService {
         }
       }
     }
+    stopwatch.start();
   }
 }
