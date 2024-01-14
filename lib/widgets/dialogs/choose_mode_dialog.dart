@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:minesweeper/core/game_service/game_mode.dart';
+import 'package:minesweeper/core/game_mode/game_mode.dart';
 import 'package:minesweeper/widgets/abstract_state.dart';
 import '../app_button.dart';
 import 'package:reactive_forms/reactive_forms.dart';

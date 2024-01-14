@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:minesweeper/core/game_service/game_service.dart';
-import 'package:minesweeper/core/game_service/tile.dart';
+import 'package:minesweeper/core/tile/tile.dart';
 import 'package:minesweeper/widgets/abstract_state.dart';
 
 class TileWidget extends StatefulWidget {

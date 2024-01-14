@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:minesweeper/core/game_service/game_mode.dart';
+import 'package:minesweeper/core/game_mode/game_mode.dart';
 import 'package:minesweeper/core/game_service/game_service.dart';
 import 'package:minesweeper/widgets/abstract_state.dart';
 import 'package:minesweeper/widgets/tile_widget.dart';
-import '../../core/game_service/tile.dart';
+import '../../core/tile/tile.dart';
 
 class PlayScreen extends StatefulWidget {
   const PlayScreen({
@@ -24,11 +24,12 @@ class _PlayScreenState extends AbstractState<PlayScreen> with WidgetsBindingObse
   double scaleFactor = 1.0;
   double baseScaleFactor = 1.0;
 
-  Future<bool> onPopPage() {
-    gameService.stopwatch.stop();
-    gameService.saveField();
-    callback();
-    return Future(() => true);
+  void onPopPage(bool success) {
+    if(success) {
+      gameService.stopwatch.stop();
+      gameService.saveField();
+      callback();
+    }
   }
 
   @override
@@ -69,8 +70,8 @@ class _PlayScreenState extends AbstractState<PlayScreen> with WidgetsBindingObse
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: onPopPage,
+    return PopScope(
+      onPopInvoked: (success) => onPopPage(success),
       child: GestureDetector(
         onScaleStart: (details) {
           baseScaleFactor = scaleFactor;
@@ -92,7 +93,7 @@ class _PlayScreenState extends AbstractState<PlayScreen> with WidgetsBindingObse
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ...gameService.gameField.map((column) => buildColumn(column)).toList()
+                ...gameService.gameField.field.map((column) => buildColumn(column)).toList()
               ],
             ),
           ),
@@ -102,8 +103,8 @@ class _PlayScreenState extends AbstractState<PlayScreen> with WidgetsBindingObse
   }
 
   Widget buildColumn(List<Tile> column) {
-    double x = (MediaQuery.of(context).size.width - 50) / (resumeGame ? gameService.width.toDouble() : gameMode.width);
-    double y = (MediaQuery.of(context).size.height - 150) / (resumeGame ? gameService.height.toDouble() : gameMode.height);
+    double x = (MediaQuery.of(context).size.width - 50) / (resumeGame ? gameService.gameField.width.toDouble() : gameMode.width);
+    double y = (MediaQuery.of(context).size.height - 150) / (resumeGame ? gameService.gameField.height.toDouble() : gameMode.height);
     double tileSize = x < y ? x : y;
     return Column(
       children: [

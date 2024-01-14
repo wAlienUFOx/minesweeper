@@ -45,7 +45,7 @@ class _TimerWidgetState extends AbstractState<TimerWidget> {
   }
 
   Widget buildDigit(int index) {
-    int seconds = ((gameService.stopwatch.elapsedMilliseconds ~/ 1000) + gameService.savedTimer).toInt();
+    int seconds = ((gameService.stopwatch.elapsed.inSeconds) + gameService.gameField.savedTimer).toInt();
     String digit = seconds > 999 ? '999' : seconds.toString();
 
     if (digit.length == 1) {
