@@ -75,6 +75,7 @@ class GameService {
     stopwatch.stop();
     gameField.setToIgnore(true);
     needChangeState.updateValue(!needChangeState.value!);
+    await Future.delayed(const Duration(milliseconds: 100));
     cleanSavedField();
   }
 

@@ -21,9 +21,6 @@ class _PlayScreenState extends AbstractState<PlayScreen> with WidgetsBindingObse
   late bool resumeGame;
   late void Function() callback;
 
-  double scaleFactor = 1.0;
-  double baseScaleFactor = 1.0;
-
   void onPopPage(bool success) {
     if(success) {
       gameService.stopwatch.stop();
@@ -72,21 +69,11 @@ class _PlayScreenState extends AbstractState<PlayScreen> with WidgetsBindingObse
   Widget build(BuildContext context) {
     return PopScope(
       onPopInvoked: (success) => onPopPage(success),
-      child: GestureDetector(
-        onScaleStart: (details) {
-          baseScaleFactor = scaleFactor;
-        },
-        onScaleUpdate: (details) {
-          setState(() {
-            scaleFactor = baseScaleFactor * details.scale;
-            if (scaleFactor < 1.0) scaleFactor = 1.0;
-          });
-        },
-        child: Transform.scale(
-          scale: scaleFactor,
+      child: InteractiveViewer(
+        child: Center(
           child: Container(
             decoration: BoxDecoration(
-              border: Border.all(color: theme.colorScheme.primary)
+                border: Border.all(color: theme.colorScheme.primary)
             ),
             margin: const EdgeInsets.all(10.0),
             padding: const EdgeInsets.all(10.0),
@@ -103,10 +90,11 @@ class _PlayScreenState extends AbstractState<PlayScreen> with WidgetsBindingObse
   }
 
   Widget buildColumn(List<Tile> column) {
-    double x = (MediaQuery.of(context).size.width - 50) / (resumeGame ? gameService.gameField.width.toDouble() : gameMode.width);
-    double y = (MediaQuery.of(context).size.height - 150) / (resumeGame ? gameService.gameField.height.toDouble() : gameMode.height);
+    double x = (MediaQuery.of(context).size.width - 40) / (resumeGame ? gameService.gameField.width.toDouble() : gameMode.width);
+    double y = (MediaQuery.of(context).size.height - 10) / (resumeGame ? gameService.gameField.height.toDouble() : gameMode.height);
     double tileSize = x < y ? x : y;
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         ...column.map((tile) => TileWidget(tile: tile, size: tileSize)).toList()
       ],

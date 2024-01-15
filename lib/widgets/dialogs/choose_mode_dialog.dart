@@ -30,6 +30,7 @@ class _ChooseModeDialogState extends AbstractState<ChooseModeDialog> {
     int mines = int.parse(customMines.value!);
     if (height == 0 || width == 0 || mines == 0) return false;
     if (mines > height * width) return false;
+    if (mines > 99) return false;
     return true;
   }
 

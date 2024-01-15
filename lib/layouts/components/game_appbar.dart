@@ -22,13 +22,17 @@ class _GameAppBarState extends AbstractState<GameAppBar> {
         color: theme.colorScheme.secondaryContainer,
       ),
       padding: const EdgeInsets.all(7.0),
-      child:  const Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child:  const Stack(
         children: [
-          MinesCounterWidget(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              MinesCounterWidget(),
+              TimerWidget()
+            ],
+          ),
           ResetButtonWidget(),
-          TimerWidget()
-        ],
+        ]
       ),
     );
   }
