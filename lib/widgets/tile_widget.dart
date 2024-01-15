@@ -47,15 +47,17 @@ class _TileWidgetState extends AbstractState<TileWidget> {
       onDoubleTap: onDoubleTap,
       child: IgnorePointer(
         ignoring: widget.tile.ignore,
-        child: Container(
-          height:widget.size - 2,
-          width: widget.size - 2,
-          decoration: BoxDecoration(
-            color: Get.isDarkMode ? const Color.fromARGB(255, 50, 50, 50) : Colors.grey,
-            border: Border.all(color: theme.colorScheme.onBackground, width: 0.5)
+        child: SizedBox(
+          height:widget.size,
+          width: widget.size,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Get.isDarkMode ? const Color.fromARGB(255, 50, 50, 50) : Colors.grey,
+              border: Border.all(color: theme.colorScheme.onBackground, width: 0.5)
+            ),
+            margin: EdgeInsets.all(1 * widget.size / 40),
+            child: Center(child: buildChild()),
           ),
-          margin: EdgeInsets.all(1 * widget.size / 40),
-          child: Center(child: buildChild()),
         ),
       ),
     );

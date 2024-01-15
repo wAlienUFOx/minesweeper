@@ -32,27 +32,22 @@ class MainLayoutState extends AbstractState<MainLayout> {
           double maxHeight = constraints.maxHeight - mData.viewInsets.collapsedSize.height;
           double maxWidth = constraints.maxWidth;
 
-          return GestureDetector(
-            onTap: () {
-              FocusManager.instance.primaryFocus?.unfocus();
-            },
-            child: SafeArea(
-              child: Scaffold(
-                backgroundColor: theme.colorScheme.background,
-                appBar: buildAppBar(),
-                floatingActionButton: widget.bottomButtons,
-                body: SizedBox(
-                  width: mData.size.width,
-                  height: mData.size.height,
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxHeight: maxHeight,
-                      minHeight: maxHeight,
-                      minWidth: maxWidth,
-                      maxWidth: maxWidth,
-                    ),
-                    child: widget.child,
+          return SafeArea(
+            child: Scaffold(
+              backgroundColor: theme.colorScheme.background,
+              appBar: buildAppBar(),
+              floatingActionButton: widget.bottomButtons,
+              body: SizedBox(
+                width: mData.size.width,
+                height: mData.size.height,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: maxHeight,
+                    minHeight: maxHeight,
+                    minWidth: maxWidth,
+                    maxWidth: maxWidth,
                   ),
+                  child: widget.child,
                 ),
               ),
             ),

@@ -6,10 +6,14 @@ class LocalStorage {
 
   static const String _keyThemeMode = 'THEME_MODE';
   static const String _keySavedField = 'SAVED_FIELD';
+  static const String _keyCustomMode = 'CUSTOM_MODE';
 
   static String? get themeMode => _storage.read(_keyThemeMode);
   static set themeMode(String? val) => _storage.write(_keyThemeMode, val);
 
   static Map<String, dynamic>? get savedField => _storage.read(_keySavedField);
   static set savedField(Map<String, dynamic>? val) => _storage.write(_keySavedField, val);
+
+  static Map<String, dynamic>? get customMode => _storage.read(_keyCustomMode);
+  static set customMode(Map<String, dynamic>? val) => _storage.write(_keyCustomMode, val);
 }

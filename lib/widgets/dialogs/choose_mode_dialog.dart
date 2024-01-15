@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:minesweeper/core/game_mode/game_mode.dart';
+import 'package:minesweeper/core/local_storage/local_storage.dart';
 import 'package:minesweeper/widgets/abstract_state.dart';
 import '../app_button.dart';
 import 'package:reactive_forms/reactive_forms.dart';
@@ -15,9 +16,9 @@ class ChooseModeDialog extends StatefulWidget {
 
 class _ChooseModeDialogState extends AbstractState<ChooseModeDialog> {
 
-  FormControl<String> customWidth = FormControl(value: '10');
-  FormControl<String> customHeight = FormControl(value: '20');
-  FormControl<String> customMines = FormControl(value: '40');
+  late FormControl<String> customWidth;
+  late FormControl<String> customHeight;
+  late FormControl<String> customMines;
 
   bool customAvailable() {
     if (customWidth.value!.isEmpty) return false;
@@ -32,6 +33,20 @@ class _ChooseModeDialogState extends AbstractState<ChooseModeDialog> {
     if (mines > height * width) return false;
     if (mines > 99) return false;
     return true;
+  }
+
+  @override
+  void onInitPage() {
+    GameMode customGameMode;
+    if (LocalStorage.customMode != null) {
+      customGameMode = GameMode.fromJson(LocalStorage.customMode!);
+    } else {
+      customGameMode = GameMode(width: 10, height: 20, mines: 40);
+    }
+    customWidth = FormControl(value: customGameMode.width.toString());
+    customHeight = FormControl(value: customGameMode.height.toString());
+    customMines = FormControl(value: customGameMode.mines.toString());
+    super.onInitPage();
   }
 
   @override
@@ -79,12 +94,15 @@ class _ChooseModeDialogState extends AbstractState<ChooseModeDialog> {
               IgnorePointer(
                 ignoring: !customAvailable(),
                 child: AppButton(
-                  onPressed: () => Get.back(
-                      result: GameMode(
-                          width: int.parse(customWidth.value!),
-                          height: int.parse(customHeight.value!),
-                          mines: int.parse(customMines.value!))
-                  ),
+                  onPressed: () {
+                    GameMode gameMode = GameMode(
+                        width: int.parse(customWidth.value!),
+                        height: int.parse(customHeight.value!),
+                        mines: int.parse(customMines.value!)
+                    );
+                    LocalStorage.customMode = gameMode.toJson();
+                    Get.back(result: gameMode);
+                  },
                   title: 'Custom',
                   color: theme.colorScheme.background.withOpacity(customAvailable() ? 1.0 : 0.3),
                   fullWidth: true,
