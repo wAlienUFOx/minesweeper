@@ -32,23 +32,25 @@ class _MinesCounterWidgetState extends AbstractState<MinesCounterWidget> {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        buildDigit(true),
-        buildDigit(false)
+        buildDigit(0),
+        buildDigit(1),
+        buildDigit(2)
       ],
     );
   }
 
-  Widget buildDigit(bool isFirst) {
+  Widget buildDigit(int index) {
     String digit = minesCounter.toString();
-    
     if (digit.length == 1) {
-      if (isFirst) digit = '0';
+      if (index < 2) digit = '0';
+    } else if (digit.length == 2) {
+      if (index == 0) digit = '0';
+      if (index == 1) digit = digit.substring(0, 1);
+      if (index == 2) digit = digit.substring(1);
     } else {
-      if (isFirst) {
-        digit = digit.substring(0, 1);
-      } else {
-        digit = digit.substring(1);
-      } 
+      if (index == 0) digit = digit.substring(0, 1);
+      if (index == 1) digit = digit.substring(1, 2);
+      if (index == 2) digit = digit.substring(2, 3);
     }
     return Container(
       width: 30,
