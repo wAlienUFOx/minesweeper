@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-///виджет кнопки
 class AppButton extends StatelessWidget {
   final void Function() onPressed;
   final String title;

@@ -1,5 +1,6 @@
 import 'package:minesweeper/layouts/components/game_appbar.dart';
 import 'package:minesweeper/pages/home/home_page.dart';
+import 'package:minesweeper/pages/leaderboard/leaderboard_page.dart';
 import 'package:minesweeper/pages/play_screen/play_screen.dart';
 import 'package:minesweeper/pages/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,11 @@ class MinesweeperApp extends StatelessWidget {
             '/game',
             const PlayScreen(),
                 (page) => MainLayout(appBar: const GameAppBar(), child: page)
+        ),
+        GetPageOf<MainLayout>(
+            '/leaderboard',
+            const LeaderboardPage(),
+                (page) => MainLayout(child: page)
         ),
       ],
     );

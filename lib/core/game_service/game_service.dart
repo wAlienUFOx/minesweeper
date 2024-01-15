@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
-import 'package:minesweeper/core/game_field/game_field.dart';
-import 'package:minesweeper/core/game_mode/game_mode.dart';
+import 'package:minesweeper/core/game_service/game_field/game_field.dart';
+import 'package:minesweeper/core/game_service/game_mode/game_mode.dart';
+import 'package:minesweeper/core/leaderboard_service/leaderboard_service.dart';
 import 'package:minesweeper/widgets/dialogs/winner_dialog.dart';
 import '../local_storage/local_storage.dart';
 import 'package:reactive_forms/reactive_forms.dart';
@@ -11,9 +12,13 @@ class GameService {
   FormControl<int> flagsCounter = FormControl(value: 0);
   FormControl<bool> needChangeState = FormControl(value: false);
   final Stopwatch stopwatch = Stopwatch();
+  bool isWin = false;
+
+  late LeaderboardService leaderboardService;
 
   void initService() {
     loadField();
+    leaderboardService = Get.find<LeaderboardService>();
   }
 
   bool canContinue() => gameField.field.isNotEmpty;
@@ -50,6 +55,7 @@ class GameService {
   }
 
   void generateEmptyField(GameMode gameMode) {
+    isWin = false;
     gameField.newGame = true;
     gameField.generateEmptyField(gameMode);
     flagsCounter.updateValue(0);
@@ -57,12 +63,17 @@ class GameService {
     stopwatch.stop();
   }
 
-  void checkIfWin() {
+  void checkIfWin() { ///multiply dialogs if open recursive by (openTile) ??
     if (!gameField.isWin()) return;
+    if (isWin == true) return;
+    isWin = true;
 
     stopwatch.stop();
     gameField.setToIgnore(false);
-    Get.dialog(WinnerDialog(time: (stopwatch.elapsed.inSeconds) + gameField.savedTimer)).then((newGame) {
+
+    int record = (stopwatch.elapsed.inSeconds) + gameField.savedTimer;
+    leaderboardService.add(record, GameMode(width: gameField.width, height: gameField.height, mines: gameField.mines));
+    Get.dialog(WinnerDialog(time: record)).then((newGame) {
       if (newGame != null && newGame) {
         restartGame();
       } else {

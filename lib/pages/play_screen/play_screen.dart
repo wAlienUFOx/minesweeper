@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:minesweeper/core/game_mode/game_mode.dart';
+import 'package:minesweeper/core/game_service/game_mode/game_mode.dart';
 import 'package:minesweeper/core/game_service/game_service.dart';
 import 'package:minesweeper/widgets/abstract_state.dart';
 import 'package:minesweeper/widgets/tile_widget.dart';
@@ -91,7 +91,7 @@ class _PlayScreenState extends AbstractState<PlayScreen> with WidgetsBindingObse
 
   Widget buildColumn(List<Tile> column) {
     double x = (MediaQuery.of(context).size.width - 42) / (resumeGame ? gameService.gameField.width.toDouble() : gameMode.width);
-    double y = (MediaQuery.of(context).size.height - 60 - 95) / (resumeGame ? gameService.gameField.height.toDouble() : gameMode.height);
+    double y = (MediaQuery.of(context).size.height - 40 - 55 - 55 - MediaQuery.of(context).padding.top - MediaQuery.of(context).padding.bottom) / (resumeGame ? gameService.gameField.height.toDouble() : gameMode.height);
     double tileSize = x < y ? x : y;
     return Column(
       mainAxisSize: MainAxisSize.min,

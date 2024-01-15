@@ -51,7 +51,7 @@ class _HomePageState extends AbstractState<HomePage> {
       ),
       GroupButton(
           title: 'Leaderboard',
-          onTap: () => {}
+          onTap: () => Get.toNamed('/leaderboard')
       ),
     ];
 
@@ -65,7 +65,7 @@ class _HomePageState extends AbstractState<HomePage> {
 
   Widget buildMenuItem(GroupButton item) {
     return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
       child: AppButton(
           onPressed: item.onTap,
           title: item.title,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:minesweeper/core/game_mode/game_mode.dart';
+import 'package:minesweeper/core/game_service/game_mode/game_mode.dart';
 import 'package:minesweeper/core/local_storage/local_storage.dart';
 import 'package:minesweeper/widgets/abstract_state.dart';
 import '../app_button.dart';
@@ -24,7 +24,7 @@ class _ChooseModeDialogState extends AbstractState<ChooseModeDialog> {
     if (customWidth.value!.isEmpty) return false;
     if (customHeight.value!.isEmpty) return false;
     if (customMines.value!.isEmpty) return false;
-    if (int.parse(customWidth.value!) > 20 || int.parse(customWidth.value!) < 5) return false;
+    if (int.parse(customWidth.value!) > 50 || int.parse(customWidth.value!) < 5) return false;
     if (int.parse(customHeight.value!) > 50 || int.parse(customHeight.value!) < 5) return false;
     int width = int.parse(customWidth.value!);
     int height = int.parse(customHeight.value!);
@@ -71,21 +71,21 @@ class _ChooseModeDialogState extends AbstractState<ChooseModeDialog> {
               ),
               const SizedBox(height: 30),
               AppButton(
-                onPressed: () => Get.back(result: GameMode(width: 9, height: 9, mines: 10)),
+                onPressed: () => Get.back(result: GameMode.beginner()),
                 title: 'Beginner',
                 color: theme.colorScheme.background,
                 fullWidth: true,
               ),
               const SizedBox(height: 10),
               AppButton(
-                onPressed: () => Get.back(result: GameMode(width: 16, height: 16, mines: 40)),
+                onPressed: () => Get.back(result: GameMode.medium()),
                 title: 'Medium',
                 color: theme.colorScheme.background,
                 fullWidth: true,
               ),
               const SizedBox(height: 10),
               AppButton(
-                onPressed: () => Get.back(result: GameMode(width: 16, height: 30, mines: 99)),
+                onPressed: () => Get.back(result: GameMode.expert()),
                 title: 'Expert',
                 color: theme.colorScheme.background,
                 fullWidth: true,
