@@ -30,7 +30,7 @@ class SplashScreenState extends State<SplashScreen> {
     Get.find<ThemeService>().initService();
     Get.find<GameService>().initService();
     Get.find<LeaderboardService>().initService();
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 500));
   }
 
   @override
@@ -38,7 +38,12 @@ class SplashScreenState extends State<SplashScreen> {
 
     return Scaffold(
         body: Container (
-          color: Colors.red,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/images/splash_img.jpg'),
+                fit: BoxFit.cover
+            ),
+          )
         )
     );
   }

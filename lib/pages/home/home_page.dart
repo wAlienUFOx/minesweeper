@@ -60,8 +60,15 @@ class _HomePageState extends AbstractState<HomePage> {
       ),
     ];
 
-    return Padding(
+    return Container(
       padding: const EdgeInsets.only(top: 8.0),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+            image: const AssetImage('assets/images/splash_img.jpg'),
+            fit: BoxFit.cover,
+            opacity: Get.isDarkMode ? 0.05 : 0.4
+        ),
+      ),
       child: Column(
         children: menuItems.map<Widget>((item) => buildMenuItem(item)).toList()
       ),
