@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:minesweeper/core/game_service/game_service.dart';
 import 'package:minesweeper/widgets/abstract_state.dart';
 
+import '../dialogs/confirm_dialog.dart';
+
 class ResetButtonWidget extends StatefulWidget {
 
   const ResetButtonWidget({super.key});
@@ -24,7 +26,11 @@ class _ResetButtonWidgetState extends AbstractState<ResetButtonWidget> {
               backgroundColor: theme.colorScheme.onBackground,
               side: BorderSide(color: theme.colorScheme.primary)
           ),
-          onPressed: Get.find<GameService>().restartGame,
+          onPressed: () => Get.dialog(const ConfirmDialog(event: 'restart game')).then((result) {
+            if (result != null && result) {
+              Get.find<GameService>().restartGame();
+            }
+          }),
           child: Icon(Icons.tag_faces_rounded, color: theme.colorScheme.primary)
       ),
     );

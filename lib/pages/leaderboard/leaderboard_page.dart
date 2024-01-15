@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:minesweeper/core/game_service/game_mode/game_mode.dart';
 import 'package:minesweeper/core/leaderboard_service/leaderboard_item/leaderboard_item.dart';
 import 'package:minesweeper/core/leaderboard_service/leaderboard_service.dart';
 import 'package:minesweeper/widgets/abstract_state.dart';
 import 'package:get/get.dart';
+import 'package:minesweeper/widgets/dialogs/confirm_dialog.dart';
 import 'package:minesweeper/widgets/slide_button.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
@@ -20,6 +22,7 @@ class _LeaderboardPageState extends AbstractState<LeaderboardPage> {
   late LeaderboardService leaderboardService;
   FormControl<int> pageIndex = FormControl(value: 0);
   String title = 'Beginner';
+  GameMode gameMode = GameMode.beginner();
   late List<LeaderboardItem> leaderBoard;
 
   @override
@@ -30,14 +33,17 @@ class _LeaderboardPageState extends AbstractState<LeaderboardPage> {
       if (index == 0) {
         title = 'Beginner';
         leaderBoard = leaderboardService.leaderboard.beginner;
+        gameMode = GameMode.beginner();
       }
       if (index == 1) {
         title = 'Medium';
         leaderBoard = leaderboardService.leaderboard.medium;
+        gameMode = GameMode.medium();
       }
       if (index == 2) {
         title = 'Expert';
         leaderBoard = leaderboardService.leaderboard.expert;
+        gameMode = GameMode.expert();
       }
       setState(() {});
     });
@@ -82,8 +88,13 @@ class _LeaderboardPageState extends AbstractState<LeaderboardPage> {
               Text(timeToBoard(item.time), style: textStyle),
               const SizedBox(width: 5),
               IconButton(
-                  onPressed: () => {},
-                  icon: Icon(Icons.delete, color: theme.colorScheme.onBackground, size: 25,)
+                  onPressed: () => Get.dialog(const ConfirmDialog(event: 'remove item')).then((result) {
+                    if (result != null && result) {
+                      leaderboardService.remove(item, gameMode);
+                      setState(() {});
+                    }
+                  }),
+                  icon: Icon(Icons.delete, color: theme.colorScheme.onBackground, size: 25)
               )
             ],
           )

@@ -67,7 +67,7 @@ class _ChooseModeDialogState extends AbstractState<ChooseModeDialog> {
               const SizedBox(height: 10),
               Text(
                   'New game',
-                  style: TextStyle(color: theme.colorScheme.primary, fontSize: 25)
+                  style: TextStyle(color: theme.colorScheme.onBackground, fontSize: 25)
               ),
               const SizedBox(height: 30),
               AppButton(
@@ -129,7 +129,7 @@ class _ChooseModeDialogState extends AbstractState<ChooseModeDialog> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(title, style: TextStyle(color: theme.colorScheme.primary, fontSize: 20)),
+        Text(title, style: TextStyle(color: theme.colorScheme.onBackground, fontSize: 20)),
         const SizedBox(height: 10),
         SizedBox(
             width: 60,

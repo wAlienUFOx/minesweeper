@@ -4,6 +4,7 @@ import 'package:minesweeper/core/game_service/game_service.dart';
 import 'package:minesweeper/widgets/abstract_state.dart';
 import 'package:minesweeper/widgets/app_button.dart';
 import 'package:minesweeper/widgets/dialogs/choose_mode_dialog.dart';
+import 'package:minesweeper/widgets/dialogs/rules_dialog.dart';
 import '../../widgets/group_button.dart';
 
 class HomePage extends StatefulWidget {
@@ -52,6 +53,10 @@ class _HomePageState extends AbstractState<HomePage> {
       GroupButton(
           title: 'Leaderboard',
           onTap: () => Get.toNamed('/leaderboard')
+      ),
+      GroupButton(
+          title: 'How to play',
+          onTap: () => Get.dialog(const RulesDialog())
       ),
     ];
 

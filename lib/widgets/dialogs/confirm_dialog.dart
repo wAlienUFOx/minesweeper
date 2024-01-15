@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:minesweeper/widgets/app_button.dart';
 
-class WinnerDialog extends StatelessWidget {
-  final int time;
+class ConfirmDialog extends StatelessWidget {
+  final String event;
 
-  const WinnerDialog({
-    required this.time,
+  const ConfirmDialog({
+    required this.event,
     super.key
   });
 
@@ -18,8 +18,8 @@ class WinnerDialog extends StatelessWidget {
       child: Center(
         child: Container(
           decoration: BoxDecoration(
-            color: theme.colorScheme.background,
-            borderRadius: const BorderRadius.all(Radius.circular(10.0))
+              color: theme.colorScheme.background,
+              borderRadius: const BorderRadius.all(Radius.circular(10.0))
           ),
           margin: const EdgeInsets.symmetric(horizontal: 15),
           padding: const EdgeInsets.symmetric(vertical: 15),
@@ -27,29 +27,28 @@ class WinnerDialog extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(height: 10),
-              Text(
-                  'Winner winner chicken dinner!',
-                  style: TextStyle(color: theme.colorScheme.onBackground, fontSize: 25)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: Text(
+                  'Are you sure you want to $event?',
+                  style: TextStyle(color: theme.colorScheme.onBackground, fontSize: 25),
+                  textAlign: TextAlign.center,
+                ),
               ),
-              const SizedBox(height: 30),
-              Text(
-                  'Your time is: $time',
-                  style: TextStyle(color: theme.colorScheme.onBackground, fontSize: 20)
-              ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   AppButton(
-                    onPressed: () => Get.back(result: true),
-                    title: 'New game',
+                    onPressed: () => Get.back(result: false),
+                    title: 'No',
                     color: theme.colorScheme.background,
                     fullWidth: false,
                     padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                   ),
                   AppButton(
-                    onPressed: () => Get.back(result: false),
-                    title: 'Ok',
+                    onPressed: () => Get.back(result: true),
+                    title: 'Yes',
                     color: theme.colorScheme.background,
                     fullWidth: false,
                     padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
