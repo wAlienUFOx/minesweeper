@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:minesweeper/widgets/abstract_state.dart';
 
 class MainLayout extends StatefulWidget {
@@ -22,6 +23,12 @@ class MainLayout extends StatefulWidget {
 }
 
 class MainLayoutState extends AbstractState<MainLayout> {
+
+  @override
+  void onInitPage() {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    super.onInitPage();
+  }
 
   @override
   Widget build(BuildContext context) {
