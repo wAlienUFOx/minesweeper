@@ -123,11 +123,7 @@ class GameService {
       gameField.newGame = false;
       generateField(x, y, gameField.mines);
     }
-    if(gameField.field[x][y].hasMine) {
-      //gameOver();
-    } else {
-      gameField.openTile(x, y, callback, checkIfWin, gameOver);
-    }
+    gameField.openTile(x, y, callback, checkIfWin, gameOver);
   }
 
   void generateField(int firstX, int firstY, int mines) {
