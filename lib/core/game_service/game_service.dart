@@ -11,7 +11,7 @@ class GameService {
   GameField gameField = GameField(field: []);
 
   FormControl<int> flagsCounter = FormControl(value: 0);
-  FormControl<bool> needChangeState = FormControl(value: false);
+  late void Function() callback;
   final Stopwatch stopwatch = Stopwatch();
   bool isWin = false;
 
@@ -54,7 +54,7 @@ class GameService {
     cleanSavedField();
     generateEmptyField(GameMode.fromGameField(gameField));
     flagsCounter.updateValue(0);
-    needChangeState.updateValue(!needChangeState.value!);
+    callback();
   }
 
   void generateEmptyField(GameMode gameMode) {
@@ -89,7 +89,7 @@ class GameService {
     vibrationService.vibrate(duration: 1000);
     stopwatch.stop();
     gameField.setToIgnore(true);
-    needChangeState.updateValue(!needChangeState.value!);
+    callback();
     await Future.delayed(const Duration(milliseconds: 100));
     cleanSavedField();
   }
@@ -105,14 +105,14 @@ class GameService {
       flagsCounter.updateValue(flagsCounter.value! - 1);
     }
     gameField.field[x][y].hasFlag = !gameField.field[x][y].hasFlag;
-    needChangeState.updateValue(!needChangeState.value!);
+    callback();
   }
 
   void openByFlags(int x, int y) {
     if(!stopwatch.isRunning) {
       stopwatch.start();
     }
-    gameField.openByFlags(x, y, needChangeState, checkIfWin);
+    gameField.openByFlags(x, y, callback, checkIfWin);
   }
 
   void openTile(int x, int y) {
@@ -126,7 +126,7 @@ class GameService {
     if(gameField.field[x][y].hasMine) {
       gameOver();
     } else {
-      gameField.openTile(x, y, needChangeState, checkIfWin);
+      gameField.openTile(x, y, callback, checkIfWin);
     }
   }
 

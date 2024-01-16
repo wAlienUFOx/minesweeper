@@ -29,10 +29,13 @@ class _PlayScreenState extends AbstractState<PlayScreen> with WidgetsBindingObse
     }
   }
 
+  void updateState() => setState(() {});
+
   @override
   void onInitPage() {
     WidgetsBinding.instance.addObserver(this);
     gameService = Get.find<GameService>();
+    gameService.callback = updateState;
     Map<String, dynamic> args = Get.arguments;
     resumeGame = args['continue'];
     callback = args['callback'];
@@ -40,11 +43,7 @@ class _PlayScreenState extends AbstractState<PlayScreen> with WidgetsBindingObse
       gameMode = args['gameMode'];
       gameService.generateEmptyField(gameMode);
     }
-
     setState(() {});
-    gameService.needChangeState.valueChanges.listen((event) {
-      if(mounted) setState(() {});
-    });
     super.onInitPage();
   }
 

@@ -1,8 +1,6 @@
 import 'dart:math';
 import 'package:minesweeper/core/tile/tile.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:reactive_forms/reactive_forms.dart';
-
 import '../game_mode/game_mode.dart';
 part 'game_field.g.dart';
 
@@ -63,7 +61,7 @@ class GameField {
     }
   }
 
-  void openByFlags(int x, int y, FormControl<bool> needChangeState, void Function() checkIfWin) {
+  void openByFlags(int x, int y, void Function() callback, void Function() checkIfWin) {
     int flagsAround = 0;
     for (int i = x-1; i <= x+1; i++) {
       if (i >= 0 && i < width) {
@@ -80,14 +78,14 @@ class GameField {
       if (i >= 0 && i < width) {
         for (int j = y-1; j <= y+1; j++) {
           if (j >= 0 && j < height) {
-            if((i != x || j != y) && !field[i][j].hasFlag && !field[i][j].isOpen) openTile(i, j, needChangeState, checkIfWin);
+            if((i != x || j != y) && !field[i][j].hasFlag && !field[i][j].isOpen) openTile(i, j, callback, checkIfWin);
           }
         }
       }
     }
   }
 
-  void openTile(int x, int y, FormControl<bool> needChangeState, void Function() checkIfWin) {
+  void openTile(int x, int y, void Function() callback, void Function() checkIfWin) {
     if(field[x][y].isOpen) return;
     field[x][y].isOpen = true;
     if(field[x][y].digit == 0) {
@@ -95,7 +93,7 @@ class GameField {
         if (i >= 0 && i < width) {
           for (int j = y-1; j <= y+1; j++) {
             if (j >= 0 && j < height) {
-              if(i != x || j != y) openTile(i, j, needChangeState, checkIfWin);
+              if(i != x || j != y) openTile(i, j, callback, checkIfWin);
             }
           }
         }
@@ -105,13 +103,13 @@ class GameField {
         if (i >= 0 && i < width) {
           for (int j = y-1; j <= y+1; j++) {
             if (j >= 0 && j < height) {
-              if((i != x || j != y) && field[i][j].digit == 0 && !field[i][j].hasMine) openTile(i, j, needChangeState, checkIfWin);
+              if((i != x || j != y) && field[i][j].digit == 0 && !field[i][j].hasMine) openTile(i, j, callback, checkIfWin);
             }
           }
         }
       }
     }
-    needChangeState.updateValue(!needChangeState.value!);
+    callback();
     checkIfWin();
   }
 
