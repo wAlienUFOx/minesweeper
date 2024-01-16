@@ -112,7 +112,7 @@ class GameService {
     if(!stopwatch.isRunning) {
       stopwatch.start();
     }
-    gameField.openByFlags(x, y, callback, checkIfWin);
+    gameField.openByFlags(x, y, callback, checkIfWin, gameOver);
   }
 
   void openTile(int x, int y) {
@@ -124,9 +124,9 @@ class GameService {
       generateField(x, y, gameField.mines);
     }
     if(gameField.field[x][y].hasMine) {
-      gameOver();
+      //gameOver();
     } else {
-      gameField.openTile(x, y, callback, checkIfWin);
+      gameField.openTile(x, y, callback, checkIfWin, gameOver);
     }
   }
 

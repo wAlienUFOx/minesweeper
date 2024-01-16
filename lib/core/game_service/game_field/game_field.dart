@@ -58,7 +58,7 @@ class GameField {
     }
   }
 
-  void openByFlags(int x, int y, void Function() callback, void Function() checkIfWin) {
+  void openByFlags(int x, int y, void Function() callback, void Function() checkIfWin, void Function() gameOver) {
     int flagsAround = 0;
     for (int i = x-1; i <= x+1; i++) {
       if (i >= 0 && i < width) {
@@ -75,15 +75,19 @@ class GameField {
       if (i >= 0 && i < width) {
         for (int j = y-1; j <= y+1; j++) {
           if (j >= 0 && j < height) {
-            if((i != x || j != y) && !field[i][j].hasFlag && !field[i][j].isOpen) openTile(i, j, callback, checkIfWin);
+            if((i != x || j != y) && !field[i][j].hasFlag && !field[i][j].isOpen) openTile(i, j, callback, checkIfWin, gameOver);
           }
         }
       }
     }
   }
 
-  void openTile(int x, int y, void Function() callback, void Function() checkIfWin) {
+  void openTile(int x, int y, void Function() callback, void Function() checkIfWin, void Function() gameOver) {
     if(field[x][y].isOpen) return;
+    if(field[x][y].hasMine) {
+      gameOver();
+      return;
+    }
     field[x][y].isOpen = true;
     openTiles++;
     if(field[x][y].digit == 0) {
@@ -91,7 +95,7 @@ class GameField {
         if (i >= 0 && i < width) {
           for (int j = y-1; j <= y+1; j++) {
             if (j >= 0 && j < height) {
-              if(i != x || j != y) openTile(i, j, callback, checkIfWin);
+              if(i != x || j != y) openTile(i, j, callback, checkIfWin, gameOver);
             }
           }
         }
@@ -101,7 +105,7 @@ class GameField {
         if (i >= 0 && i < width) {
           for (int j = y-1; j <= y+1; j++) {
             if (j >= 0 && j < height) {
-              if((i != x || j != y) && field[i][j].digit == 0 && !field[i][j].hasMine) openTile(i, j, callback, checkIfWin);
+              if((i != x || j != y) && field[i][j].digit == 0 && !field[i][j].hasMine) openTile(i, j, callback, checkIfWin, gameOver);
             }
           }
         }
