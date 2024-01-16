@@ -11,6 +11,7 @@ class GameField {
   int height;
   int mines;
   int savedTimer;
+  int openTiles;
   bool newGame;
 
   GameField({
@@ -19,17 +20,20 @@ class GameField {
     this.height = 0,
     this.mines = 0,
     this.savedTimer = 0,
+    this.openTiles = 0,
     this.newGame = true
   });
 
   void clear() {
     field = [];
     savedTimer = 0;
+    openTiles = 0;
   }
 
   void generateEmptyField(GameMode gameMode) {
     field = [];
     savedTimer = 0;
+    openTiles = 0;
     mines = gameMode.mines;
     width = gameMode.width;
     height = gameMode.height;
@@ -42,14 +46,7 @@ class GameField {
   }
 
   bool isWin() {
-    for (int x = 0; x < width; x++) {
-      for (int y = 0; y < height; y++) {
-        if (!field[x][y].hasMine && !field[x][y].isOpen) {
-          return false;
-        }
-      }
-    }
-    return true;
+    return openTiles == (width * height) - mines;
   }
 
   void setToIgnore(bool isLoose) {
@@ -88,6 +85,7 @@ class GameField {
   void openTile(int x, int y, void Function() callback, void Function() checkIfWin) {
     if(field[x][y].isOpen) return;
     field[x][y].isOpen = true;
+    openTiles++;
     if(field[x][y].digit == 0) {
       for (int i = x-1; i <= x+1; i++) {
         if (i >= 0 && i < width) {

@@ -66,7 +66,7 @@ class GameService {
     stopwatch.stop();
   }
 
-  void checkIfWin() { ///multiply dialogs if open recursive by (openTile) ??
+  void checkIfWin() {
     if (!gameField.isWin()) return;
     if (isWin == true) return;
     isWin = true;
