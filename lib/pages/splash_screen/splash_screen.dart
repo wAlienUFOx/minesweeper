@@ -5,6 +5,7 @@ import 'package:minesweeper/core/app_bindings.dart';
 import 'package:minesweeper/core/game_service/game_service.dart';
 import 'package:minesweeper/core/leaderboard_service/leaderboard_service.dart';
 import 'package:minesweeper/core/theme_service/theme_service.dart';
+import 'package:minesweeper/core/vibration_service/vibration_service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -28,6 +29,7 @@ class SplashScreenState extends State<SplashScreen> {
     await AppBindings().dependencies();
     await GetStorage.init();
     Get.find<ThemeService>().initService();
+    await Get.find<VibrationService>().initService();
     Get.find<GameService>().initService();
     Get.find<LeaderboardService>().initService();
     await Future.delayed(const Duration(milliseconds: 500));

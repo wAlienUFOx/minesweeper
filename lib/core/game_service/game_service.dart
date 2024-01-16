@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:minesweeper/core/game_service/game_field/game_field.dart';
 import 'package:minesweeper/core/game_service/game_mode/game_mode.dart';
 import 'package:minesweeper/core/leaderboard_service/leaderboard_service.dart';
+import 'package:minesweeper/core/vibration_service/vibration_service.dart';
 import 'package:minesweeper/widgets/dialogs/winner_dialog.dart';
 import '../local_storage/local_storage.dart';
 import 'package:reactive_forms/reactive_forms.dart';
@@ -15,9 +16,11 @@ class GameService {
   bool isWin = false;
 
   late LeaderboardService leaderboardService;
+  late VibrationService vibrationService;
 
   void initService() {
     loadField();
+    vibrationService = Get.find<VibrationService>();
     leaderboardService = Get.find<LeaderboardService>();
   }
 
@@ -83,6 +86,7 @@ class GameService {
   }
 
   void gameOver() async {
+    vibrationService.vibrate(duration: 1000);
     stopwatch.stop();
     gameField.setToIgnore(true);
     needChangeState.updateValue(!needChangeState.value!);
@@ -96,6 +100,7 @@ class GameService {
     }
     if (gameField.field[x][y].hasFlag == false) {
       flagsCounter.updateValue(flagsCounter.value! + 1);
+      vibrationService.vibrate();
     } else {
       flagsCounter.updateValue(flagsCounter.value! - 1);
     }

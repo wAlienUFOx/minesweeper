@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:minesweeper/core/theme_service/theme_service.dart';
+import 'package:minesweeper/core/vibration_service/vibration_service.dart';
 import 'dart:math';
 import 'package:minesweeper/widgets/abstract_state.dart';
 
@@ -15,6 +16,7 @@ class _SettingsWidgetState extends AbstractState<SettingsWidget> with SingleTick
 
   late List<ActionButton> buttons;
   late ThemeService themeService;
+  late VibrationService vibrationService;
   late final AnimationController controller;
   late final Animation<double> expandAnimation;
   bool open = false;
@@ -22,16 +24,7 @@ class _SettingsWidgetState extends AbstractState<SettingsWidget> with SingleTick
   @override
   void onInitPage() {
     themeService = Get.find<ThemeService>();
-    buttons = [
-      ActionButton(
-          onPressed: () => themeService.changeTheme(),
-          icon: const Icon(Icons.sunny)
-      ),
-      ActionButton(
-          onPressed: () => {},
-          icon: const Icon(Icons.volume_down)
-      )
-    ];
+    vibrationService = Get.find<VibrationService>();
     controller = AnimationController(
         value: 0.0,
         duration: const Duration(milliseconds: 500),
@@ -63,6 +56,20 @@ class _SettingsWidgetState extends AbstractState<SettingsWidget> with SingleTick
 
   @override
   Widget build(BuildContext context) {
+    buttons = [
+      ActionButton(
+          onPressed: () => themeService.changeTheme(),
+          icon: const Icon(Icons.sunny)
+      ),
+      ActionButton(
+          onPressed: () {
+            vibrationService.switchMode();
+            setState(() {});
+          },
+          icon: Icon(vibrationService.isOn ? Icons.vibration : Icons.phone_android)
+      )
+    ];
+
     return SizedBox.expand(
       child: Stack(
         alignment: Alignment.bottomRight,
