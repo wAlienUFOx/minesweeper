@@ -6,6 +6,7 @@ import 'package:minesweeper/core/vibration_service/vibration_service.dart';
 import 'package:minesweeper/widgets/dialogs/winner_dialog.dart';
 import '../local_storage/local_storage.dart';
 import 'package:reactive_forms/reactive_forms.dart';
+import '../tile/tile.dart';
 
 class GameService {
   GameField gameField = GameField(field: []);
@@ -24,7 +25,11 @@ class GameService {
     leaderboardService = Get.find<LeaderboardService>();
   }
 
-  bool canContinue() => gameField.field.isNotEmpty;
+  bool canContinue() => !gameField.newGame;
+
+  void setTileCallbackFunction(Tile tile, void Function() callback) {
+    gameField.field[tile.x][tile.y].callback = callback;
+  }
 
   void loadField() {
     if (LocalStorage.savedField != null) {
@@ -42,9 +47,12 @@ class GameService {
   }
 
   void saveField() {
-    gameField.savedTimer = stopwatch.elapsed.inSeconds;
+    gameField.savedTimer += stopwatch.elapsed.inSeconds;
+    stopwatch.reset();
+    stopwatch.stop();
     LocalStorage.savedField = gameField.toJson();
   }
+
   void cleanSavedField() {
     gameField.clear();
     LocalStorage.savedField = GameField(field: []).toJson();
@@ -52,15 +60,15 @@ class GameService {
 
   void restartGame() {
     cleanSavedField();
-    generateEmptyField(GameMode.fromGameField(gameField));
+    generateEmptyField(GameMode.fromGameField(gameField), true);
     flagsCounter.updateValue(0);
     callback();
   }
 
-  void generateEmptyField(GameMode gameMode) {
+  void generateEmptyField(GameMode gameMode, bool restart) {
     isWin = false;
     gameField.newGame = true;
-    gameField.generateEmptyField(gameMode);
+    gameField.generateEmptyField(gameMode, restart);
     flagsCounter.updateValue(0);
     stopwatch.reset();
     stopwatch.stop();
@@ -94,36 +102,36 @@ class GameService {
     cleanSavedField();
   }
 
-  void changeFlag(int x, int y) {
+  void changeFlag(Tile tile) {
     if(!stopwatch.isRunning) {
       stopwatch.start();
     }
-    if (gameField.field[x][y].hasFlag == false) {
+    if (gameField.field[tile.x][tile.y].hasFlag == false) {
       flagsCounter.updateValue(flagsCounter.value! + 1);
       vibrationService.vibrate();
     } else {
       flagsCounter.updateValue(flagsCounter.value! - 1);
     }
-    gameField.field[x][y].hasFlag = !gameField.field[x][y].hasFlag;
-    callback();
+    gameField.field[tile.x][tile.y].hasFlag = !gameField.field[tile.x][tile.y].hasFlag;
+    gameField.field[tile.x][tile.y].callback();
   }
 
-  void openByFlags(int x, int y) {
+  void openByFlags(Tile tile) {
     if(!stopwatch.isRunning) {
       stopwatch.start();
     }
-    gameField.openByFlags(x, y, callback, checkIfWin, gameOver);
+    gameField.openByFlags(tile.x, tile.y, checkIfWin, gameOver);
   }
 
-  void openTile(int x, int y) {
+  void openTile(Tile tile) {
     if(!stopwatch.isRunning) {
       stopwatch.start();
     }
     if(gameField.newGame) {
       gameField.newGame = false;
-      generateField(x, y, gameField.mines);
+      generateField(tile.x, tile.y, gameField.mines);
     }
-    gameField.openTile(x, y, callback, checkIfWin, gameOver);
+    gameField.openTile(tile.x, tile.y, checkIfWin, gameOver);
   }
 
   void generateField(int firstX, int firstY, int mines) {

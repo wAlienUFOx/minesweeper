@@ -25,22 +25,30 @@ class GameField {
   });
 
   void clear() {
-    field = [];
     savedTimer = 0;
     openTiles = 0;
+    newGame = true;
   }
 
-  void generateEmptyField(GameMode gameMode) {
-    field = [];
+  void generateEmptyField(GameMode gameMode, bool restart) {
     savedTimer = 0;
     openTiles = 0;
-    mines = gameMode.mines;
-    width = gameMode.width;
-    height = gameMode.height;
-    for (int x = 0; x < width; x++) {
-      field.add([]);
-      for (int y = 0; y < height; y++) {
-        field[x].add(Tile(x: x, y: y));
+    if (restart) {
+      for (int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
+          field[x][y] = Tile(x: x, y: y, callback: field[x][y].callback);
+        }
+      }
+    } else {
+      field = [];
+      mines = gameMode.mines;
+      width = gameMode.width;
+      height = gameMode.height;
+      for (int x = 0; x < width; x++) {
+        field.add([]);
+        for (int y = 0; y < height; y++) {
+          field[x].add(Tile(x: x, y: y, callback: () => {}));
+        }
       }
     }
   }
@@ -58,7 +66,7 @@ class GameField {
     }
   }
 
-  void openByFlags(int x, int y, void Function() callback, void Function() checkIfWin, void Function() gameOver) {
+  void openByFlags(int x, int y, void Function() checkIfWin, void Function() gameOver) {
     int flagsAround = 0;
     for (int i = x-1; i <= x+1; i++) {
       if (i >= 0 && i < width) {
@@ -75,14 +83,14 @@ class GameField {
       if (i >= 0 && i < width) {
         for (int j = y-1; j <= y+1; j++) {
           if (j >= 0 && j < height) {
-            if((i != x || j != y) && !field[i][j].hasFlag && !field[i][j].isOpen) openTile(i, j, callback, checkIfWin, gameOver);
+            if((i != x || j != y) && !field[i][j].hasFlag && !field[i][j].isOpen) openTile(i, j, checkIfWin, gameOver);
           }
         }
       }
     }
   }
 
-  void openTile(int x, int y, void Function() callback, void Function() checkIfWin, void Function() gameOver) {
+  void openTile(int x, int y, void Function() checkIfWin, void Function() gameOver) {
     if(field[x][y].isOpen) return;
     if(field[x][y].hasMine) {
       gameOver();
@@ -95,7 +103,7 @@ class GameField {
         if (i >= 0 && i < width) {
           for (int j = y-1; j <= y+1; j++) {
             if (j >= 0 && j < height) {
-              if(i != x || j != y) openTile(i, j, callback, checkIfWin, gameOver);
+              if(i != x || j != y) openTile(i, j, checkIfWin, gameOver);
             }
           }
         }
@@ -105,13 +113,13 @@ class GameField {
         if (i >= 0 && i < width) {
           for (int j = y-1; j <= y+1; j++) {
             if (j >= 0 && j < height) {
-              if((i != x || j != y) && field[i][j].digit == 0 && !field[i][j].hasMine) openTile(i, j, callback, checkIfWin, gameOver);
+              if((i != x || j != y) && field[i][j].digit == 0 && !field[i][j].hasMine) openTile(i, j, checkIfWin, gameOver);
             }
           }
         }
       }
     }
-    callback();
+    field[x][y].callback();
     checkIfWin();
   }
 
@@ -122,7 +130,7 @@ class GameField {
       x = Random().nextInt(width);
       y = Random().nextInt(height);
       if (!field[x][y].hasMine && !((firstX - x).abs() < 2 && (firstY - y).abs() < 2)) { //
-        field[x][y] = Tile(x: x, y: y, hasMine: true);
+        field[x][y].hasMine = true;
         mines--;
       }
     }

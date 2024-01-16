@@ -14,6 +14,7 @@ Tile _$TileFromJson(Map<String, dynamic> json) => Tile(
       isOpen: json['isOpen'] as bool? ?? false,
       hasFlag: json['hasFlag'] as bool? ?? false,
       ignore: json['ignore'] as bool? ?? false,
+      callback: () => {}
     );
 
 Map<String, dynamic> _$TileToJson(Tile instance) => <String, dynamic>{

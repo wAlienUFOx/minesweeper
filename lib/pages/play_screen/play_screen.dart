@@ -36,13 +36,15 @@ class _PlayScreenState extends AbstractState<PlayScreen> with WidgetsBindingObse
     WidgetsBinding.instance.addObserver(this);
     gameService = Get.find<GameService>();
     gameService.callback = updateState;
+
     Map<String, dynamic> args = Get.arguments;
     resumeGame = args['continue'];
     callback = args['callback'];
     if (!resumeGame) {
       gameMode = args['gameMode'];
-      gameService.generateEmptyField(gameMode);
+      gameService.generateEmptyField(gameMode, false);
     }
+
     setState(() {});
     super.onInitPage();
   }

@@ -23,20 +23,24 @@ class _TileWidgetState extends AbstractState<TileWidget> {
   late GameService gameService;
 
   void onTap () {
-    if (!widget.tile.hasFlag) gameService.openTile(widget.tile.x, widget.tile.y);
+    if (!widget.tile.hasFlag) gameService.openTile(widget.tile);
   }
 
   void onDoubleTap () {
     if(widget.tile.isOpen) {
-      gameService.openByFlags(widget.tile.x, widget.tile.y);
+      gameService.openByFlags(widget.tile);
     } else {
-      gameService.changeFlag(widget.tile.x, widget.tile.y);
+      gameService.changeFlag(widget.tile);
     }
   }
+
+  void update () => setState(() {});
+
 
   @override
   void onInitPage() {
     gameService = Get.find<GameService>();
+    gameService.setTileCallbackFunction(widget.tile, update);
     super.onInitPage();
   }
 

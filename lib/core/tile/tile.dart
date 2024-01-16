@@ -1,7 +1,5 @@
-import 'package:json_annotation/json_annotation.dart';
 part 'tile.g.dart';
 
-@JsonSerializable()
 class Tile {
   int x;
   int y;
@@ -10,6 +8,7 @@ class Tile {
   bool isOpen;
   bool hasFlag;
   bool ignore;
+  void Function() callback;
 
   Tile({
     required this.x,
@@ -18,7 +17,8 @@ class Tile {
     this.digit = 0,
     this.isOpen = false,
     this.hasFlag = false,
-    this.ignore = false
+    this.ignore = false,
+    required this.callback
   });
 
   factory Tile.fromJson(Map<String, dynamic> json) => _$TileFromJson(json);
