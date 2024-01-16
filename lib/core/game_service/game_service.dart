@@ -27,10 +27,6 @@ class GameService {
 
   bool canContinue() => !gameField.newGame;
 
-  void setTileCallbackFunction(Tile tile, void Function() callback) {
-    gameField.field[tile.x][tile.y].callback = callback;
-  }
-
   void loadField() {
     if (LocalStorage.savedField != null) {
       gameField = GameField.fromJson(LocalStorage.savedField!);

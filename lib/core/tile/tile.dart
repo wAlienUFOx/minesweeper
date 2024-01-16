@@ -21,6 +21,8 @@ class Tile {
     required this.callback
   });
 
+  void setCallback(void Function() function) => callback = function;
+
   factory Tile.fromJson(Map<String, dynamic> json) => _$TileFromJson(json);
   Map<String, dynamic> toJson() => _$TileToJson(this);
 }

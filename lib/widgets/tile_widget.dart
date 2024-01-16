@@ -40,7 +40,7 @@ class _TileWidgetState extends AbstractState<TileWidget> {
   @override
   void onInitPage() {
     gameService = Get.find<GameService>();
-    gameService.setTileCallbackFunction(widget.tile, update);
+    widget.tile.setCallback(update);
     super.onInitPage();
   }
 
