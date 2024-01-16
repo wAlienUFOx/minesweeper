@@ -139,7 +139,10 @@ class _ChooseModeDialogState extends AbstractState<ChooseModeDialog> {
               decoration: InputDecoration(
                 filled: true,
                 fillColor: theme.colorScheme.onBackground,
-                border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                enabledBorder: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    borderSide: BorderSide(width: 0)
+                ),
                 isDense: true,
                 contentPadding: const EdgeInsets.symmetric(vertical: 7)
               ),
