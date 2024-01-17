@@ -23,7 +23,7 @@ class _PlayScreenState extends AbstractState<PlayScreen> with WidgetsBindingObse
 
   void onPopPage(bool success) {
     if(success) {
-      gameService.stopwatch.stop();
+      gameService.pauseTimer();
       gameService.saveField();
       callback();
     }
@@ -57,9 +57,9 @@ class _PlayScreenState extends AbstractState<PlayScreen> with WidgetsBindingObse
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) gameService.stopwatch.start();
+    if (state == AppLifecycleState.resumed) gameService.startTimer();
     if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
-      gameService.stopwatch.stop();
+      gameService.pauseTimer();
       gameService.saveField();
     }
     if (state == AppLifecycleState.detached) gameService.saveField();

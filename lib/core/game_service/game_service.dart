@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:get/get.dart';
 import 'package:minesweeper/core/game_service/game_field/game_field.dart';
 import 'package:minesweeper/core/game_service/game_mode/game_mode.dart';
@@ -13,7 +14,8 @@ class GameService {
 
   FormControl<int> flagsCounter = FormControl(value: 0);
   late void Function() callback;
-  final Stopwatch stopwatch = Stopwatch();
+  late void Function() updateTimer;
+  late Timer timer = Timer.periodic(const Duration(seconds: 1), (timer) {});
   bool isWin = false;
 
   late LeaderboardService leaderboardService;
@@ -26,6 +28,18 @@ class GameService {
   }
 
   bool canContinue() => !gameField.newGame;
+
+  void pauseTimer() {
+    timer.cancel();
+  }
+
+  void startTimer(){
+    timer.cancel();
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      gameField.savedTimer++;
+      updateTimer();
+    });
+  }
 
   void loadField() {
     if (LocalStorage.savedField != null) {
@@ -43,9 +57,7 @@ class GameService {
   }
 
   void saveField() {
-    gameField.savedTimer += stopwatch.elapsed.inSeconds;
-    stopwatch.reset();
-    stopwatch.stop();
+    pauseTimer();
     LocalStorage.savedField = gameField.toJson();
   }
 
@@ -56,6 +68,7 @@ class GameService {
 
   void restartGame() {
     cleanSavedField();
+    pauseTimer();
     generateEmptyField(GameMode.fromGameField(gameField), true);
     flagsCounter.updateValue(0);
     callback();
@@ -66,8 +79,6 @@ class GameService {
     gameField.newGame = true;
     gameField.generateEmptyField(gameMode, restart);
     flagsCounter.updateValue(0);
-    stopwatch.reset();
-    stopwatch.stop();
   }
 
   void checkIfWin() {
@@ -75,12 +86,11 @@ class GameService {
     if (isWin == true) return;
     isWin = true;
 
-    stopwatch.stop();
+    pauseTimer();
     gameField.setToIgnore(false);
 
-    int record = (stopwatch.elapsed.inSeconds) + gameField.savedTimer;
-    leaderboardService.add(record, GameMode(width: gameField.width, height: gameField.height, mines: gameField.mines));
-    Get.dialog(WinnerDialog(time: record)).then((newGame) {
+    leaderboardService.add(gameField.savedTimer, GameMode(width: gameField.width, height: gameField.height, mines: gameField.mines));
+    Get.dialog(WinnerDialog(time: gameField.savedTimer)).then((newGame) {
       if (newGame != null && newGame) {
         restartGame();
       } else {
@@ -91,7 +101,7 @@ class GameService {
 
   void gameOver() async {
     vibrationService.vibrate(duration: 1000);
-    stopwatch.stop();
+    pauseTimer();
     gameField.setToIgnore(true);
     callback();
     await Future.delayed(const Duration(milliseconds: 100));
@@ -99,9 +109,7 @@ class GameService {
   }
 
   void changeFlag(Tile tile) {
-    if(!stopwatch.isRunning) {
-      stopwatch.start();
-    }
+    startTimer();
     if (gameField.field[tile.x][tile.y].hasFlag == false) {
       flagsCounter.updateValue(flagsCounter.value! + 1);
       vibrationService.vibrate();
@@ -113,16 +121,12 @@ class GameService {
   }
 
   void openByFlags(Tile tile) {
-    if(!stopwatch.isRunning) {
-      stopwatch.start();
-    }
+    startTimer();
     gameField.openByFlags(tile.x, tile.y, checkIfWin, gameOver);
   }
 
   void openTile(Tile tile) {
-    if(!stopwatch.isRunning) {
-      stopwatch.start();
-    }
+    startTimer();
     if(gameField.newGame) {
       gameField.newGame = false;
       generateField(tile.x, tile.y, gameField.mines);
@@ -132,6 +136,6 @@ class GameService {
 
   void generateField(int firstX, int firstY, int mines) {
     gameField.generateField(firstX, firstY, mines);
-    stopwatch.start();
+    startTimer();
   }
 }

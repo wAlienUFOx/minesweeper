@@ -25,7 +25,6 @@ class GameField {
   });
 
   void clear() {
-    savedTimer = 0;
     openTiles = 0;
     newGame = true;
   }
