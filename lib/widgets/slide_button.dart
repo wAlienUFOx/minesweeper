@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:reactive_forms/reactive_forms.dart';
 
 class SlideButton extends StatefulWidget {
 
-  final FormControl<int> index;
+  final int pageIndex;
+  final void Function(int index) callback;
   final double fontSize;
   final Color fontColor;
   final double borderRadius;
 
   const SlideButton({
-    required this.index,
+    required this.pageIndex,
+    required this.callback,
+    required this.fontColor,
     this.fontSize = 15,
     this.borderRadius = 10,
-    required this.fontColor,
     super.key
   });
 
@@ -21,6 +22,9 @@ class SlideButton extends StatefulWidget {
 }
 
 class _SlideButtonState extends State<SlideButton> {
+
+  //int pageIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -52,12 +56,9 @@ class _SlideButtonState extends State<SlideButton> {
                 side: BorderSide(color: theme.colorScheme.primary)
               )),
               backgroundColor: MaterialStateColor.resolveWith((states) =>
-                  theme.colorScheme.onBackground.withOpacity(buttonIndex == widget.index.value! ? 0.6 : 1.0))
+                  theme.colorScheme.onBackground.withOpacity(buttonIndex == widget.pageIndex ? 0.6 : 1.0))
           ),
-          onPressed: () {
-            widget.index.updateValue(buttonIndex);
-            setState(() {});
-          },
+          onPressed: () => widget.callback(buttonIndex),
           child: Text(textData, style: TextStyle(color: widget.fontColor, fontSize: widget.fontSize),)
       ),
     );
