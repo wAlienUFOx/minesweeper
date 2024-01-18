@@ -79,7 +79,7 @@ class _PlayScreenState extends AbstractState<PlayScreen> with WidgetsBindingObse
       onPopInvoked: (success) => onPopPage(success),
       child: InteractiveViewer(
         boundaryMargin: settingsService.wideBoundary
-            ? EdgeInsets.symmetric(horizontal: tileSize / 2 * gameMode.width, vertical: tileSize / 2 * gameMode.height)
+            ? EdgeInsets.symmetric(horizontal: tileSize / 2 * x, vertical: tileSize / 2 * y)
             : EdgeInsets.zero,
         child: Center(
           child: Container(
