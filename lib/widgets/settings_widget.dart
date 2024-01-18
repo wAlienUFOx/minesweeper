@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:minesweeper/core/flag_settings/flag_settings_service.dart';
-import 'package:minesweeper/core/theme_service/theme_service.dart';
+import 'package:minesweeper/core/settings_service/settings_service.dart';
 import 'package:minesweeper/core/vibration_service/vibration_service.dart';
 import 'dart:math';
 import 'package:minesweeper/widgets/abstract_state.dart';
@@ -16,18 +15,16 @@ class SettingsWidget extends StatefulWidget {
 class _SettingsWidgetState extends AbstractState<SettingsWidget> with SingleTickerProviderStateMixin {
 
   late List<ActionButton> buttons;
-  late ThemeService themeService;
+  late SettingsService settingsService;
   late VibrationService vibrationService;
-  late FlagSettingsService flagSettingsService;
   late final AnimationController controller;
   late final Animation<double> expandAnimation;
   bool open = false;
 
   @override
   void onInitPage() {
-    themeService = Get.find<ThemeService>();
+    settingsService = Get.find<SettingsService>();
     vibrationService = Get.find<VibrationService>();
-    flagSettingsService = Get.find<FlagSettingsService>();
     controller = AnimationController(
         value: 0.0,
         duration: const Duration(milliseconds: 500),
@@ -61,7 +58,7 @@ class _SettingsWidgetState extends AbstractState<SettingsWidget> with SingleTick
   Widget build(BuildContext context) {
     buttons = [
       ActionButton(
-          onPressed: () => themeService.changeTheme(),
+          onPressed: () => settingsService.changeTheme(),
           icon: const Icon(Icons.sunny)
       ),
       ActionButton(
@@ -73,7 +70,7 @@ class _SettingsWidgetState extends AbstractState<SettingsWidget> with SingleTick
       ),
       ActionButton(
           onPressed: () {
-            flagSettingsService.switchMode();
+            settingsService.switchFlagMode();
             setState(() {});
           },
           icon: Stack(
@@ -82,10 +79,26 @@ class _SettingsWidgetState extends AbstractState<SettingsWidget> with SingleTick
               const Icon(Icons.flag, color: Color.fromARGB(255, 165, 42, 42), size: 30,),
               Positioned(
                   top: 8,
-                  child: Icon(flagSettingsService.flagMode == FlagMode.doubleTap
+                  child: Icon(settingsService.flagMode == FlagMode.doubleTap
                       ? Icons.keyboard_double_arrow_down
                       : Icons.vertical_align_bottom,
                   )
+              ),
+            ],
+          )
+      ),
+      ActionButton(
+          onPressed: () {
+            settingsService.switchBoundaryMode();
+            setState(() {});
+          },
+          icon: Stack(
+            alignment: Alignment.center,
+            children: [
+              Transform.rotate(angle: pi / 2, child: const Icon(Icons.rectangle_outlined, size: 30,)),
+              Positioned(
+                  left: settingsService.wideBoundary ? 12 : null,
+                  child: Transform.rotate(angle: pi / 2, child: const Icon(Icons.rectangle_outlined, size: 20))
               ),
             ],
           )

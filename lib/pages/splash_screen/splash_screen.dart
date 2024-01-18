@@ -2,10 +2,9 @@ import  'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:minesweeper/core/app_bindings.dart';
-import 'package:minesweeper/core/flag_settings/flag_settings_service.dart';
 import 'package:minesweeper/core/game_service/game_service.dart';
 import 'package:minesweeper/core/leaderboard_service/leaderboard_service.dart';
-import 'package:minesweeper/core/theme_service/theme_service.dart';
+import 'package:minesweeper/core/settings_service/settings_service.dart';
 import 'package:minesweeper/core/vibration_service/vibration_service.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -29,9 +28,8 @@ class SplashScreenState extends State<SplashScreen> {
   Future<void> initApp() async {
     await AppBindings().dependencies();
     await GetStorage.init();
-    Get.find<ThemeService>().initService();
+    Get.find<SettingsService>().initService();
     await Get.find<VibrationService>().initService();
-    Get.find<FlagSettingsService>().initService();
     Get.find<GameService>().initService();
     Get.find<LeaderboardService>().initService();
     await Future.delayed(const Duration(milliseconds: 500));

@@ -7,6 +7,7 @@ class LocalStorage {
   static const String _keyThemeMode = 'THEME_MODE';
   static const String _keyVibrationMode = 'VIBRATION_MODE';
   static const String _keyFlagMode = 'FLAG_MODE';
+  static const String _keyBoundaryMode = 'BOUNDARY_MODE';
   static const String _keySavedField = 'SAVED_FIELD';
   static const String _keyCustomMode = 'CUSTOM_MODE';
   static const String _keyLeaderboard = 'LEADERBOARD';
@@ -19,6 +20,9 @@ class LocalStorage {
 
   static String? get flagMode => _storage.read(_keyFlagMode);
   static set flagMode(String? val) => _storage.write(_keyFlagMode, val);
+
+  static String? get boundaryMode => _storage.read(_keyBoundaryMode);
+  static set boundaryMode(String? val) => _storage.write(_keyBoundaryMode, val);
 
   static Map<String, dynamic>? get savedField => _storage.read(_keySavedField);
   static set savedField(Map<String, dynamic>? val) => _storage.write(_keySavedField, val);

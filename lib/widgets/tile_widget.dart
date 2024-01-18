@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:minesweeper/core/flag_settings/flag_settings_service.dart';
 import 'package:minesweeper/core/game_service/game_service.dart';
+import 'package:minesweeper/core/settings_service/settings_service.dart';
 import 'package:minesweeper/core/tile/tile.dart';
 import 'package:minesweeper/widgets/abstract_state.dart';
 
@@ -22,7 +22,7 @@ class TileWidget extends StatefulWidget {
 class _TileWidgetState extends AbstractState<TileWidget> {
 
   late GameService gameService;
-  late FlagSettingsService flagSettingsService;
+  late SettingsService settingsService;
 
   void openTile () {
     if (!widget.tile.hasFlag) gameService.openTile(widget.tile);
@@ -42,7 +42,7 @@ class _TileWidgetState extends AbstractState<TileWidget> {
   @override
   void onInitPage() {
     gameService = Get.find<GameService>();
-    flagSettingsService = Get.find<FlagSettingsService>();
+    settingsService = Get.find<SettingsService>();
     widget.tile.setCallback(update);
     super.onInitPage();
   }
@@ -71,7 +71,7 @@ class _TileWidgetState extends AbstractState<TileWidget> {
         child: child,
       );
     }
-    if (flagSettingsService.flagMode == FlagMode.doubleTap) {
+    if (settingsService.flagMode == FlagMode.doubleTap) {
       return GestureDetector(
         onTap: openTile,
         onDoubleTap: changeFLag,

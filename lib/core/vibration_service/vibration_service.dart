@@ -18,11 +18,11 @@ class VibrationService {
 
   void switchMode() {
     isOn = !isOn;
-    if(isOn && hasVibration) vibrate();
+    vibrate();
     LocalStorage.vibrationMode = isOn ? "On" : "Off";
   }
 
   void vibrate({int duration = 100}) {
-    Vibration.vibrate(duration: duration);
+    if(isOn && hasVibration) Vibration.vibrate(duration: duration);
   }
 }
