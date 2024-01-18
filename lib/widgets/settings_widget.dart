@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:minesweeper/core/flag_settings/flag_settings_service.dart';
 import 'package:minesweeper/core/theme_service/theme_service.dart';
 import 'package:minesweeper/core/vibration_service/vibration_service.dart';
 import 'dart:math';
@@ -17,6 +18,7 @@ class _SettingsWidgetState extends AbstractState<SettingsWidget> with SingleTick
   late List<ActionButton> buttons;
   late ThemeService themeService;
   late VibrationService vibrationService;
+  late FlagSettingsService flagSettingsService;
   late final AnimationController controller;
   late final Animation<double> expandAnimation;
   bool open = false;
@@ -25,6 +27,7 @@ class _SettingsWidgetState extends AbstractState<SettingsWidget> with SingleTick
   void onInitPage() {
     themeService = Get.find<ThemeService>();
     vibrationService = Get.find<VibrationService>();
+    flagSettingsService = Get.find<FlagSettingsService>();
     controller = AnimationController(
         value: 0.0,
         duration: const Duration(milliseconds: 500),
@@ -67,6 +70,25 @@ class _SettingsWidgetState extends AbstractState<SettingsWidget> with SingleTick
             setState(() {});
           },
           icon: Icon(vibrationService.isOn ? Icons.vibration : Icons.phone_android)
+      ),
+      ActionButton(
+          onPressed: () {
+            flagSettingsService.switchMode();
+            setState(() {});
+          },
+          icon: Stack(
+            alignment: Alignment.center,
+            children: [
+              const Icon(Icons.flag, color: Color.fromARGB(255, 165, 42, 42), size: 30,),
+              Positioned(
+                  top: 8,
+                  child: Icon(flagSettingsService.flagMode == FlagMode.doubleTap
+                      ? Icons.keyboard_double_arrow_down
+                      : Icons.vertical_align_bottom,
+                  )
+              ),
+            ],
+          )
       )
     ];
 
@@ -135,7 +157,8 @@ class ExpandingActionButton extends StatelessWidget {
           bottom: progress.value * distance,
           child: Transform.rotate(
               angle: (1.0 - progress.value) * pi / 2,
-            child: child!)
+              child: child!
+          )
         );
       },
       child: FadeTransition(

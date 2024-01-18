@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:minesweeper/core/flag_settings/flag_settings_service.dart';
 import 'package:minesweeper/core/game_service/game_service.dart';
 import 'package:minesweeper/core/tile/tile.dart';
 import 'package:minesweeper/widgets/abstract_state.dart';
@@ -21,17 +22,18 @@ class TileWidget extends StatefulWidget {
 class _TileWidgetState extends AbstractState<TileWidget> {
 
   late GameService gameService;
+  late FlagSettingsService flagSettingsService;
 
-  void onTap () {
+  void openTile () {
     if (!widget.tile.hasFlag) gameService.openTile(widget.tile);
   }
 
-  void onDoubleTap () {
-    if(widget.tile.isOpen) {
-      gameService.openByFlags(widget.tile);
-    } else {
-      gameService.changeFlag(widget.tile);
-    }
+  void changeFLag () {
+    gameService.changeFlag(widget.tile);
+  }
+
+  void openByFlags () {
+    gameService.openByFlags(widget.tile);
   }
 
   void update () => setState(() {});
@@ -40,31 +42,48 @@ class _TileWidgetState extends AbstractState<TileWidget> {
   @override
   void onInitPage() {
     gameService = Get.find<GameService>();
+    flagSettingsService = Get.find<FlagSettingsService>();
     widget.tile.setCallback(update);
     super.onInitPage();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      onDoubleTap: onDoubleTap,
-      child: IgnorePointer(
-        ignoring: widget.tile.ignore,
-        child: SizedBox(
-          height:widget.size,
-          width: widget.size,
-          child: Container(
-            decoration: BoxDecoration(
+    Widget child = IgnorePointer(
+      ignoring: widget.tile.ignore,
+      child: SizedBox(
+        height:widget.size,
+        width: widget.size,
+        child: Container(
+          decoration: BoxDecoration(
               color: Get.isDarkMode ? const Color.fromARGB(255, 50, 50, 50) : Colors.grey,
               border: Border.all(color: theme.colorScheme.onBackground, width: 0.5)
-            ),
-            margin: EdgeInsets.all(1 * widget.size / 40),
-            child: Center(child: buildChild()),
           ),
+          margin: EdgeInsets.all(1 * widget.size / 40),
+          child: Center(child: buildChild()),
         ),
       ),
     );
+
+    if (widget.tile.isOpen) {
+      return GestureDetector(
+        onDoubleTap: openByFlags,
+        child: child,
+      );
+    }
+    if (flagSettingsService.flagMode == FlagMode.doubleTap) {
+      return GestureDetector(
+        onTap: openTile,
+        onDoubleTap: changeFLag,
+        child: child,
+      );
+    } else {
+      return GestureDetector(
+        onTap: openTile,
+        onLongPress: changeFLag,
+        child: child,
+      );
+    }
   }
 
   Widget buildChild() {

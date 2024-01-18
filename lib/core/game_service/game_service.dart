@@ -94,6 +94,7 @@ class GameService {
 
     pauseTimer();
     gameField.setToIgnore(false);
+    callback();
 
     leaderboardService.add(gameField.savedTimer, GameMode(width: gameField.width, height: gameField.height, mines: gameField.mines));
     Get.dialog(WinnerDialog(time: gameField.savedTimer)).then((newGame) {
