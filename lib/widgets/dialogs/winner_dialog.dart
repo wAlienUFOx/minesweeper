@@ -10,6 +10,15 @@ class WinnerDialog extends StatelessWidget {
     super.key
   });
 
+  String timeToBoard(int time) {
+    if (time < 60) return '${time}s';
+    int minutes;
+    int seconds;
+    minutes = time ~/ 60;
+    seconds = time - (minutes * 60);
+    return '${minutes}m ${seconds}s';
+  }
+
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
@@ -33,7 +42,7 @@ class WinnerDialog extends StatelessWidget {
               ),
               const SizedBox(height: 30),
               Text(
-                  'Your time is: $time',
+                  'Your time is: ${timeToBoard(time)}',
                   style: TextStyle(color: theme.colorScheme.onBackground, fontSize: 20)
               ),
               const SizedBox(height: 30),
@@ -41,19 +50,19 @@ class WinnerDialog extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   AppButton(
+                    onPressed: () => Get.back(result: false),
+                    title: 'Menu',
+                    color: theme.colorScheme.background,
+                    fullWidth: false,
+                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                  ),
+                  AppButton(
                     onPressed: () => Get.back(result: true),
                     title: 'New game',
                     color: theme.colorScheme.background,
                     fullWidth: false,
                     padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                   ),
-                  AppButton(
-                    onPressed: () => Get.back(result: false),
-                    title: 'Ok',
-                    color: theme.colorScheme.background,
-                    fullWidth: false,
-                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                  )
                 ],
               ),
             ],

@@ -46,7 +46,7 @@ class RulesDialog extends StatelessWidget {
                 Text(
                   '- Single click on closed square - open that square\n'
                       '- Double click on closed square - put flag on that square\n'
-                      '- Double click on open square (if number of flags around '
+                      '- Double click / longPress (can be selected in settings) on open square (if number of flags around '
                       'that square is equal to square number) - open safe squares, surrounded clicked one. '
                       'Be Careful! If flags were placed incorrectly - you will lose',
                   style: TextStyle(color: theme.colorScheme.onBackground, fontSize: 18),

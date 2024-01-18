@@ -100,6 +100,9 @@ class GameService {
     Get.dialog(WinnerDialog(time: gameField.savedTimer)).then((newGame) {
       if (newGame != null && newGame) {
         restartGame();
+      } else if (newGame != null && !newGame) {
+        cleanSavedField();
+        Get.offAllNamed('/home');
       } else {
         cleanSavedField();
       }
