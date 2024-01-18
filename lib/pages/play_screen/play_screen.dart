@@ -57,7 +57,6 @@ class _PlayScreenState extends AbstractState<PlayScreen> with WidgetsBindingObse
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) gameService.startTimer();
     if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
       gameService.pauseTimer();
       gameService.saveField();

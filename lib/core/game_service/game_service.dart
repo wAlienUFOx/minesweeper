@@ -15,8 +15,10 @@ class GameService {
   FormControl<int> flagsCounter = FormControl(value: 0);
   late void Function() callback;
   late void Function() updateTimer;
-  late Timer timer = Timer.periodic(const Duration(seconds: 1), (timer) {});
+  late Timer timer;
   bool isWin = false;
+  bool timerInit = true;
+  int timerTick = 0;
 
   late LeaderboardService leaderboardService;
   late VibrationService vibrationService;
@@ -30,15 +32,18 @@ class GameService {
   bool canContinue() => !gameField.newGame;
 
   void pauseTimer() {
-    timer.cancel();
+    if (timerTick != 0) timerTick = 0;
   }
 
   void startTimer(){
-    timer.cancel();
-    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      gameField.savedTimer++;
-      updateTimer();
-    });
+    if (timerInit) {
+      timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        gameField.savedTimer += timerTick;
+        updateTimer();
+      });
+      timerInit = false;
+    }
+    if (timerTick == 0) timerTick = 1;
   }
 
   void loadField() {
@@ -71,6 +76,7 @@ class GameService {
     pauseTimer();
     generateEmptyField(GameMode.fromGameField(gameField), true);
     flagsCounter.updateValue(0);
+    updateTimer();
     callback();
   }
 
